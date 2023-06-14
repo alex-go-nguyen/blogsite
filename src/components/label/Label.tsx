@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
+import cx from 'classnames';
 
 export interface LabelProps {
-    title: string;
+  color: 'primary' | 'secondary';
 }
 
-export default function Label({ title }: LabelProps) {
-    return <span className="bg-blue-500 text-white px-4 py-1 rounded-lg">{title}</span>;
+export default function Label({ color, children }: PropsWithChildren<LabelProps>) {
+  return (
+    <span
+      className={cx(
+        'px-4 py-1 rounded-lg font-medium',
+        color === 'primary' ? 'bg-blue-500 text-white' : 'bg-label-light text-blue-500 dark:bg-label-dark',
+      )}
+    >
+      {children}
+    </span>
+  );
 }

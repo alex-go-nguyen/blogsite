@@ -1,23 +1,27 @@
 import * as React from 'react';
 import { HiUserCircle } from 'react-icons/hi';
-import cx from 'classnames';
 import Image from 'next/image';
 
 export interface AvatarProps {
-    src?: string;
-    width: number;
-    height: number;
-    alt?: string;
+  src?: string;
+  width: number;
+  height: number;
+  alt: string;
+  onClick?: () => void;
 }
 
-export default function Avatar({ src, width, height, alt }: AvatarProps) {
-    return (
-        <div className={cx('rounded-full overflow-hidden cursor-pointer')}>
-            {src ? (
-                <Image src={src} width={width} height={height} alt={alt} />
-            ) : (
-                <HiUserCircle className="w-10 h-10 text-gray-400 dark:text-white" />
-            )}
-        </div>
-    );
+export default function Avatar({ src, width, height, alt, onClick }: AvatarProps) {
+  return (
+    <div
+      className="rounded-full overflow-hidden cursor-pointer relative hover:opacity-60"
+      style={{ width: `${width}px`, height: `${height}px` }}
+      onClick={onClick}
+    >
+      {src ? (
+        <Image src={src} fill quality={100} alt={alt} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+      ) : (
+        <HiUserCircle className="w-full h-full text-gray-400 dark:text-white" />
+      )}
+    </div>
+  );
 }
