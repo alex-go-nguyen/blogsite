@@ -22,7 +22,7 @@ const schema = object({
 export default function Login() {
   const router = useRouter();
 
-  const { user, loading, error, login } = useAuth();
+  const { user, loading, error, login } = useAuth({});
 
   const { register, handleSubmit } = useForm<LoginPayload>({ resolver: yupResolver(schema) });
 

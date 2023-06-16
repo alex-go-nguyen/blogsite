@@ -27,7 +27,7 @@ export default function Header() {
 
   const { value: dropdownValue, setFalse, toggle: toggleDropdown } = useBoolean(false);
 
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth({});
 
   const handleLogout = () => {
     logout();
@@ -39,7 +39,7 @@ export default function Header() {
       initial={{ y: -250 }}
       animate={{ y: 0 }}
       transition={{ duration: 1, type: 'spring' }}
-      className="container grid grid-cols-2 lg:grid-cols-11 items-center justify-between mx-auto py-6"
+      className="container grid grid-cols-3 lg:grid-cols-11 items-center justify-between mx-auto py-6"
     >
       <div className="lg:hidden col-span-1 z-20">
         <span className="text-4xl" onClick={toggle}>
@@ -48,9 +48,6 @@ export default function Header() {
       </div>
       <MiniNavigation isOpen={value}>
         <div className="w-full pt-2 px-4">
-          <Link href="/" className="flex flex-row-reverse text-black dark:text-white col-span-2 mx-auto py-4">
-            <Logo />
-          </Link>
           <ul className="col-span-5 text-color-bold dark:text-white ">
             <li className="px-4 mx-2 py-4 cursor-pointer hover:bg-gray-200 transition-all duration-100 rounded-lg dark:hover:bg-slate-500 active:bg-gray-300 dark:active:bg-slate-700">
               <Link href="/">Home</Link>
@@ -91,12 +88,9 @@ export default function Header() {
           className="bg-gray-100 dark:bg-search-dark dark:border-dark-mode ml-4"
         />
       </div>
-      <div className="col-span-2 text-blue-500">
+      <div className="lg:col-span-2 text-blue-500">
         {user ? (
-          <div className="flex justify-center items-center relative">
-            <span className="mx-4 cursor-pointer hover:text-red-500">
-              <TfiPencilAlt />
-            </span>
+          <div className="flex justify-end items-center relative">
             <div className="relative">
               <Avatar
                 src={user?.avatar && getAvatarUser(user.avatar)}
@@ -105,7 +99,14 @@ export default function Header() {
                 alt={user.name}
                 onClick={toggleDropdown}
               />
-              <Popper isOpen={dropdownValue} onClose={setFalse}>
+              <Popper isOpen={dropdownValue} onClose={setFalse} onItemClick={setFalse}>
+                <Link
+                  href="/publish/post"
+                  className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white px-4 py-2 flex items-center"
+                >
+                  <TfiPencilAlt />
+                  <span className="ml-3">Write</span>
+                </Link>
                 <Link
                   href="/profile"
                   className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white px-4 py-2 flex items-center"

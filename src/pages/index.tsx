@@ -19,14 +19,14 @@ export default function Home({ homepage }: InferGetStaticPropsType<GetStaticProp
 
   useEffect(() => {
     if (!data) {
-      dispatch(getArticles(1));
+      dispatch(getArticles({ page: 1 }));
     }
   }, [data, dispatch]);
 
   return (
     <div>
       <Seo seo={homepage.attributes.seo} />
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 1 }}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25, duration: 1 }}>
         <Slider data={data} />
       </motion.div>
       <motion.h1
@@ -85,7 +85,7 @@ export const getStaticProps: GetStaticProps<{ homepage: HomepageData }> = storeW
         },
       });
 
-      await dispatch(getArticles(1));
+      await dispatch(getArticles({ page: 1 }));
 
       return {
         props: { homepage: data.data },

@@ -8,7 +8,7 @@ export interface AuthState {
   user: UserResponseData | null;
   loading: boolean;
   error: boolean;
-  isAuthenticated: boolean;
+  isAuthenticated?: boolean;
   isPasswordChanged: boolean;
 }
 
@@ -16,7 +16,6 @@ const initialState: AuthState = {
   user: null,
   loading: false,
   error: false,
-  isAuthenticated: false,
   isPasswordChanged: false,
 };
 
@@ -79,10 +78,12 @@ export const authSlice = createSlice({
       })
       .addCase(getMe.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isAuthenticated = true;
         state.loading = false;
       })
       .addCase(getMe.rejected, (state, action) => {
         state.loading = false;
+        state.isAuthenticated = false;
       })
 
       .addCase(postRegister.pending, (state) => {

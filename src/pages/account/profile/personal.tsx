@@ -2,7 +2,8 @@ import Input from '@/components/Input/Input';
 import Avatar from '@/components/avatar/Avatar';
 import Button from '@/components/button/Button';
 import { useAuth } from '@/components/context/auth';
-import { updateUser } from '@/redux/features/users/userDetailSlice';
+import { getMe } from '@/redux/features/auth/authSlice';
+import { updateUser } from '@/redux/features/users/userSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { UpdateUserPayload } from '@/services/user/users.dto';
 import { getAvatarUser } from '@/utils/media';
@@ -10,8 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { mixed, object, string } from 'yup';
-
-export interface PersonalProps {}
+import { ToastContainer, toast } from 'react-toastify';
 
 const schema = object({
   avatar: mixed(),
@@ -20,36 +20,46 @@ const schema = object({
   major: string(),
 });
 
-export default function Personal(props: PersonalProps) {
-  const { user } = useAuth();
+export default function Personal() {
+  const { user } = useAuth({ redirectTo: '/login' });
 
   const dispatch = useAppDispatch();
 
   const { data, loading, error } = useAppSelector((state) => state.userDetail);
 
-  const { register, handleSubmit } = useForm<UpdateUserPayload>({ resolver: yupResolver(schema) });
+  const { register, setValue, handleSubmit, reset } = useForm<UpdateUserPayload>({ resolver: yupResolver(schema) });
+
+  const onSubmitHandler = (payload: UpdateUserPayload) => {
+    if (user) {
+      dispatch(updateUser({ user, payload }));
+    }
+  };
 
   useEffect(() => {
     if (data && !loading) {
-      alert('updated user');
+      toast.success('Update successfully!');
+      dispatch(getMe());
     }
   }, [data, loading]);
 
   if (!user) return null;
 
-  const onSubmitHandler = (payload: UpdateUserPayload) => {
-    dispatch(updateUser({ user, payload }));
-  };
-
   return (
     <div>
+      <ToastContainer />
       <h1 className=" text-3xl mb-2">Personal Info</h1>
       <p>Manage your personal info. </p>
 
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <div className="my-8 flex justify-center">
-          <Avatar src={user.avatar && getAvatarUser(user.avatar)} width={100} height={100} alt={user.name} />
-          <input {...register('avatar')} type="file" />
+          <Avatar
+            isPicker
+            src={user.avatar && getAvatarUser(user.avatar)}
+            width={100}
+            height={100}
+            alt={user.name}
+            onChange={(data) => setValue('avatar', data)}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -73,9 +83,9 @@ export default function Personal(props: PersonalProps) {
           </div>
         </div>
         <Button type="submit" variant="solid" className="float-right ml-4">
-          Submit
+          Confirm
         </Button>
-        <Button type="button" variant="outlined" className="float-right">
+        <Button type="button" variant="outlined" className="float-right" onClick={() => reset()}>
           Cancel
         </Button>
       </form>

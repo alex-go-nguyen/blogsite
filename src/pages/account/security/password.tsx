@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { object, ref, string } from 'yup';
 import { resetState } from '@/redux/features/auth/authSlice';
+import { ToastContainer, toast } from 'react-toastify';
 
 export interface IUserPasswordProps {}
 
@@ -32,7 +33,7 @@ export default function UserPassword(props: IUserPasswordProps) {
 
   const { register, handleSubmit, reset } = useForm<ChangePasswordPayload>({ resolver: yupResolver(schema) });
 
-  const { loading, isPasswordChanged, changePassword } = useAuth();
+  const { loading, isPasswordChanged, changePassword } = useAuth({});
 
   const onSubmitHandler = (ChangePasswordData: ChangePasswordPayload) => {
     changePassword(ChangePasswordData);
@@ -40,14 +41,15 @@ export default function UserPassword(props: IUserPasswordProps) {
 
   useEffect(() => {
     if (isPasswordChanged) {
-      alert('password change');
       reset();
       dispatch(resetState());
+      toast.success('Update password successfully!');
     }
   }, [isPasswordChanged, reset, dispatch]);
 
   return (
     <div>
+      <ToastContainer />
       <h1 className=" text-3xl mb-2">Change password</h1>
       <p>
         Change password for your account. You should use the strong password to prevent ilegal access for your account
@@ -75,9 +77,9 @@ export default function UserPassword(props: IUserPasswordProps) {
         </div>
 
         <Button type="submit" variant="solid" className="float-right ml-4">
-          Submit
+          Confirm
         </Button>
-        <Button type="button" variant="outlined" className="float-right">
+        <Button type="button" variant="outlined" className="float-right" onClick={() => reset()}>
           Cancel
         </Button>
       </form>

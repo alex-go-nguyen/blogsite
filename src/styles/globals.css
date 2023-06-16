@@ -1,9 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('react-toastify/dist/ReactToastify.css');
 
 :root {
 }
 
 body {
+}
+
+.dark .ck-editor {
+  color: black;
+}
+
+.ck-editor {
+  border-radius: 16px;
+  background: transparent;
 }

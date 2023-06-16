@@ -36,7 +36,7 @@ export default function SignUp() {
 
   const dispatch = useAppDispatch();
 
-  const { user, loading, error, register: doRegister } = useAuth();
+  const { user, loading, error, register: doRegister } = useAuth({});
 
   const {
     register,

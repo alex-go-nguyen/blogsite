@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { HydrateAction } from './userDetailSlice';
+import { HydrateAction } from './userSlice';
 import { getUsersAPI } from '@/services/user/user.service';
 import { UserResponseData } from '@/services/user/users.dto';
 

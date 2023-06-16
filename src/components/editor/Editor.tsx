@@ -1,30 +1,89 @@
-import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { Avatar } from '@/services/user/users.dto';
+import axiosClient from '@/utils/axiosClient';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { FileLoader, UploadAdapter } from '@ckeditor/ckeditor5-upload';
+import type { Editor as IEditor } from '@ckeditor/ckeditor5-core';
+import { ChangeEvent, ChangeEventHandler, ComponentProps, FormEvent } from 'react';
+import { ChangeHandler } from 'react-hook-form';
 
-export interface EditorProps {
-  onChange: (data: string) => void;
-  editorLoaded: boolean;
-  name: string;
-  value: string;
+export type EditorProps = {
+  value?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onBlur?: ChangeEventHandler<HTMLInputElement>;
+};
+
+function initPlugin(editor: IEditor) {
+  editor.ui.view.editable.extendTemplate({
+    attributes: {
+      style: {
+        minHeight: '200px',
+      },
+    },
+  });
 }
 
-const Editor = ({ onChange, editorLoaded, name, value }: EditorProps) => {
+function uploadPlugin(editor: IEditor) {
+  editor.plugins.get('FileRepository').createUploadAdapter = function (loader: FileLoader): UploadAdapter {
+    return {
+      upload: function () {
+        return new Promise((resolve, reject) =>
+          loader.file.then(async (file) => {
+            if (file) {
+              const body = new FormData();
+
+              body.append('files', file);
+
+              try {
+                const { data } = await axiosClient.post<Avatar[]>('/upload', body, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+                });
+
+                resolve({ default: 'http://localhost:1337' + data[0].url });
+              } catch (error) {
+                reject(error);
+              }
+            }
+          }),
+        );
+      },
+    };
+  };
+}
+
+function Editor({ value, onChange, onBlur, ...props }: EditorProps) {
   return (
-    <div>
-      {editorLoaded ? (
-        <CKEditor
-          editor={ClassicEditor}
-          data={value}
-          onChange={(_: any, editor: any) => {
-            const data = editor.getData();
-            onChange(data);
-          }}
-        />
-      ) : (
-        <div>Editor loading</div>
-      )}
-    </div>
+    <CKEditor
+      {...props}
+      config={{
+        extraPlugins: [initPlugin, uploadPlugin],
+      }}
+      editor={ClassicEditor}
+      data={value}
+      onChange={(_, editor) => {
+        if (onChange) {
+          const data = editor.getData();
+          onChange({
+            target: {
+              value: data,
+            },
+          } as ChangeEvent<HTMLInputElement>);
+        }
+      }}
+      onBlur={(_, editor) => {
+        if (onBlur) {
+          const data = editor.getData();
+          onBlur({
+            target: {
+              value: data,
+            },
+          } as ChangeEvent<HTMLInputElement>);
+        }
+      }}
+    />
   );
-};
+}
 
 export default Editor;

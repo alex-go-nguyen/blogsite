@@ -2,10 +2,10 @@ import { HTMLAttributes, ReactNode } from 'react';
 import { BsPersonFill, BsPersonVcardFill } from 'react-icons/bs';
 import { MdHome, MdSecurity } from 'react-icons/md';
 import { TfiAngleDown } from 'react-icons/tfi';
-import cx from 'classnames';
 import useBoolean from '@/hooks/useBoolean';
 import { HiKey } from 'react-icons/hi';
 import { useRouter } from 'next/router';
+import cx from 'classnames';
 
 export interface NavbarSubMenuProps extends HTMLAttributes<HTMLDivElement> {
   startIcons?: ReactNode;
@@ -23,9 +23,16 @@ export const NavbarSubMenu = ({ startIcons, title, children, className }: Navbar
       >
         {startIcons}
         <span className="mx-4">{title}</span>
-        <TfiAngleDown className={cx('text-xs transition-all duration-200 absolute right-4', value && 'rotate-180')} />
+        <TfiAngleDown className={cx('text-xs transition-all duration-200 absolute right-4', value && 'rotate-180 ')} />
       </div>
-      {value && <span>{children}</span>}
+      <div
+        className={cx(
+          'h-0 w-0 transition-all duration-200 overflow-hidden',
+          value && '!h-full !w-full transition-all duration-200',
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 };
@@ -40,9 +47,14 @@ export const NavbarSubMenuItem = ({ children, href = '#', className }: NavbarSub
   );
 };
 
-export const SubMenuItem = ({ children, className }: NavbarSubMenuProps) => {
+export const SubMenuItem = ({ children, href = '#', className }: NavbarSubMenuProps) => {
+  const router = useRouter();
+
   return (
-    <div className={cx('flex items-center py-2 cursor-pointer pl-4 pr-10 hover:bg-blue-200', className)}>
+    <div
+      className={cx('flex items-center py-2 cursor-pointer pl-4 pr-10 hover:bg-blue-200', className)}
+      onClick={() => router.push(href)}
+    >
       {children}
     </div>
   );
@@ -50,8 +62,8 @@ export const SubMenuItem = ({ children, className }: NavbarSubMenuProps) => {
 
 export default function AccountNavbar({ className }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cx('text-base text-color-bold dark:text-color-bold-dark', className)}>
-      <SubMenuItem>
+    <div className={cx('text-base text-color-bold dark:text-color-bold-dark transition-all duration-100 ', className)}>
+      <SubMenuItem href="/account">
         <MdHome />
         <span className="mx-4">Home</span>
       </SubMenuItem>

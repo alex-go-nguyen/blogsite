@@ -1,5 +1,6 @@
 import { Avatar, UpdateUserPayload, UserResponseData } from '@/services/user/users.dto';
 import axiosClient from '@/utils/axiosClient';
+import { AxiosResponse } from 'axios';
 
 export const getUserDetailAPI = async (id: number) => {
   const { data } = await axiosClient.get<UserResponseData>(`/users/${id}`, {
@@ -39,6 +40,9 @@ export const forgotPassword = async (email: string) => {
 
 export const updateUserAPI = async (user: UserResponseData, payload: UpdateUserPayload) => {
   const { name, about, major, avatar } = payload;
+
+  let response: AxiosResponse;
+
   if (avatar && avatar.length > 0) {
     if (user.avatar) {
       await axiosClient.delete(`/upload/files/${user.avatar.id}`);
@@ -53,12 +57,10 @@ export const updateUserAPI = async (user: UserResponseData, payload: UpdateUserP
       },
     });
 
-    const { data } = await axiosClient.put(`/users/${user.id}`, { ...payload, avatar: res.data[0].id });
-
-    return data;
+    response = await axiosClient.put(`/users/${user.id}`, { ...payload, avatar: res.data[0].id });
+  } else {
+    response = await axiosClient.put(`/users/${user.id}`, { name, about, major });
   }
 
-  const { data } = await axiosClient.put(`/users/${user.id}`, { name, about, major });
-
-  return data;
+  return response.data;
 };

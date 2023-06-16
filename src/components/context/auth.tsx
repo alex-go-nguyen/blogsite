@@ -1,21 +1,15 @@
-import {
-  AuthState,
-  getMe,
-  postChangePassword,
-  postLogin,
-  postLogout,
-  postRegister,
-} from '@/redux/features/auth/authSlice';
+import { getMe, postChangePassword, postLogin, postLogout, postRegister } from '@/redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { ChangePasswordPayload, LoginPayload, RegisterPayload } from '@/services/auth/auth.dto';
 import { UserResponseData } from '@/services/user/users.dto';
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 type AuthContextProps = {
   user: UserResponseData | null;
   loading: boolean;
   error: boolean;
-  isAuthenticated: boolean;
+  isAuthenticated?: boolean;
   isPasswordChanged: boolean;
   login: (payload: LoginPayload) => void;
   logout: () => void;
@@ -35,9 +29,15 @@ const defaultValue: AuthContextProps = {
   changePassword: () => {},
 };
 
+interface UseAuthProps {
+  redirectTo?: string;
+}
+
 const AuthContext = createContext<AuthContextProps>(defaultValue);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const router = useRouter();
+
   const dispatch = useAppDispatch();
 
   const { user, isAuthenticated, isPasswordChanged, loading, error } = useAppSelector((state) => state.auth);
@@ -62,4 +62,15 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = ({ redirectTo }: UseAuthProps) => {
+  const authContext = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (redirectTo && authContext.isAuthenticated === false) {
+      router.push(redirectTo);
+    }
+  }, [authContext.isAuthenticated, router]);
+
+  return authContext;
+};

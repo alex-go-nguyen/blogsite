@@ -2,7 +2,7 @@ import { Article } from '@/services/article/article.dto';
 import { getArticleDetailAPI, getArticlesAPI, getArticlesByWriterAPI } from '@/services/article/article.service';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { HydrateAction } from '../users/userDetailSlice';
+import { HydrateAction } from '../users/userSlice';
 
 interface ArticlesState {
   data: Article | null;
@@ -16,12 +16,12 @@ const initialState: ArticlesState = {
   error: false,
 };
 
-export const getArticleDetail = createAsyncThunk('articles/getArticleDetail', (slug: string) =>
+export const getArticleDetail = createAsyncThunk('article/getArticleDetail', (slug: string) =>
   getArticleDetailAPI(slug),
 );
 
 export const articleDetailSlice = createSlice({
-  name: 'articleDetail',
+  name: 'article',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

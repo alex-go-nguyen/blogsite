@@ -53,7 +53,7 @@ export type AuthResponse = {
 };
 
 export type UpdateUserPayload = {
-  avatar?: FileList;
+  avatar?: FileList | null;
   name?: string;
   about?: string;
   major?: string;

@@ -4,9 +4,10 @@ import cx from 'classnames';
 export interface PopperProps extends PropsWithChildren {
   isOpen: boolean;
   onClose: () => void;
+  onItemClick: () => void;
 }
 
-export default function Popper({ isOpen, onClose, children }: PopperProps) {
+export default function Popper({ isOpen, onClose, onItemClick, children }: PopperProps) {
   const popperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,11 +28,11 @@ export default function Popper({ isOpen, onClose, children }: PopperProps) {
     <div
       ref={popperRef}
       className={cx(
-        'absolute -bottom-1 right-0 translate-y-full bg-white dark:bg-dark-mode text-color-thin dark:text-color-thin-dark font-semibold z-10 border dark:border-dark-mode min-w-max rounded-md overflow-hidden z-20',
-        isOpen ? 'block' : 'hidden',
+        'absolute -bottom-1 right-0 translate-y-full bg-white dark:bg-dark-mode text-color-thin dark:text-color-thin-dark font-semibold z-10 border dark:border-dark-mode min-w-max rounded-md overflow-hidden origin-top-right transition-all duration-400',
+        isOpen ? 'scale-1' : ' scale-0',
       )}
     >
-      {children}
+      <p onClick={onItemClick}>{children}</p>
     </div>
   );
 }

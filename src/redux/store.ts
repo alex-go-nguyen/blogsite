@@ -5,15 +5,17 @@ import { articleDetailSlice } from './features/articles/articleDetailSlice';
 import { articlesSlice } from './features/articles/articlesSlice';
 import { articlesWriterSlice } from './features/articles/articlesUserSlice';
 import { categoriesSlice } from './features/categories/categoriesSlice';
-import { userDetailSlice } from './features/users/userDetailSlice';
+import { userDetailSlice } from './features/users/userSlice';
 import { usersSlice } from './features/users/usersSlice';
 import { authSlice } from './features/auth/authSlice';
+import { postArticleSlice } from './features/articles/postArticleSlice';
 
 export const store = configureStore({
   reducer: {
     articles: articlesSlice.reducer,
     articleDetail: articleDetailSlice.reducer,
     articlesWriter: articlesWriterSlice.reducer,
+    postArticle: postArticleSlice.reducer,
     users: usersSlice.reducer,
     userDetail: userDetailSlice.reducer,
     categories: categoriesSlice.reducer,

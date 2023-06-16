@@ -3,6 +3,7 @@ import { RootState } from '@/redux/store';
 import { getUserDetailAPI, updateUserAPI } from '@/services/user/user.service';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
+import authSlice from '../auth/authSlice';
 
 interface UsersState {
   data: UserResponseData | null;

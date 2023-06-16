@@ -1,7 +1,7 @@
 import { Article } from '@/services/article/article.dto';
 import { getArticlesByWriterAPI } from '@/services/article/article.service';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { HydrateAction } from '../users/userDetailSlice';
+import { HydrateAction } from '../users/userSlice';
 import { HYDRATE } from 'next-redux-wrapper';
 import { BaseResponseData } from '@/dtos/base';
 

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import Card from '@/components/card/Card';
-import { getUserDetail } from '@/redux/features/users/userDetailSlice';
+import { getUserDetail } from '@/redux/features/users/userSlice';
 import { getArticlesByWriter } from '@/redux/features/articles/articlesUserSlice';
 import { getUsersAPI } from '@/services/user/user.service';
 import { SEO } from '@/services/homepage/homepage.dto';

@@ -16,7 +16,7 @@ export default function Post() {
 
   const dispatch = useAppDispatch();
 
-  const { data, loading } = useAppSelector((state) => state.articleDetail);
+  const { data } = useAppSelector((state) => state.articleDetail);
 
   useEffect(() => {
     if (!data) {
@@ -53,7 +53,7 @@ export default function Post() {
         </div>
         <div
           dangerouslySetInnerHTML={{
-            __html: data.content.replaceAll(/\/uploads/g, 'http://localhost:1337/uploads'),
+            __html: data.content?.replaceAll(/\/uploads/g, 'http://localhost:1337/uploads'),
           }}
           className="my-4"
         />
@@ -65,8 +65,7 @@ export default function Post() {
 Post.Layout = 'Main';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const page = 1;
-  const data = await getArticlesAPI(page);
+  const data = await getArticlesAPI({});
 
   const paths = data.map((item) => ({
     params: {
@@ -74,11 +73,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 };
 
-export const getStaticProps: GetStaticProps = storeWrapper.getStaticProps(({ dispatch }) => async ({ params }) => {
-  await dispatch(getArticleDetail(params?.slug as string));
+export const getStaticProps = storeWrapper.getStaticProps(({ dispatch }) => ({ params }) => {
+  dispatch(getArticleDetail(params?.slug as string));
 
   return {
     props: {},
