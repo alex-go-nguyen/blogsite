@@ -1,39 +1,39 @@
 import { storeWrapper, useAppSelector } from '@/redux/store';
-import Avatar from '@/components/avatar/Avatar';
-import SocialMedia from '@/components/socialMedia/SocialMedia';
-import { getAvatarUser, getStrapiMedia } from '@/utils/media';
+import { getStrapiMedia } from '@/utils/media';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import Card from '@/components/card/Card';
 import { getUserDetail } from '@/redux/features/users/userSlice';
-import { getArticlesByWriter } from '@/redux/features/articles/articlesUserSlice';
+import { getArticlesByWriter } from '@/redux/features/articles/articlesFilterSlice';
 import { getUsersAPI } from '@/services/user/user.service';
 import { SEO } from '@/services/homepage/homepage.dto';
-import Seo from '@/components/seo/seo';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { Avatar, Card, Seo, SocialMedia } from '@/components';
 
 export default function Writer() {
   const router = useRouter();
 
   const dispatch = useDispatch();
 
-  const { data: userData } = useAppSelector((state) => state.userDetail);
-  const { data: articlesData } = useAppSelector((state) => state.articlesWriter);
+  const { data: user, loading: userLoading } = useAppSelector((state) => state.userDetail);
+  const { data: articles, loading: articlesLoading } = useAppSelector((state) => state.articlesWriter);
+
+  const loading = userLoading || articlesLoading;
 
   useEffect(() => {
-    if (!userData) {
+    if (!user) {
       dispatch(getUserDetail(Number(router.query.id)) as any);
     }
-  }, [userData, dispatch, router.query.id]);
+  }, [user, dispatch, router.query.id]);
 
-  if (!userData) {
+  if (!user) {
     return null;
   }
 
   const seo: SEO = {
-    metaTitle: userData.name,
-    metaDescription: userData.about,
+    metaTitle: user.name,
+    metaDescription: user.about,
     article: true,
   };
 
@@ -44,19 +44,18 @@ export default function Writer() {
         <div className="bg-footer-color dark:bg-search-dark py-8">
           <div className="flex justify-center">
             <Avatar
-              src={userData.avatar && getAvatarUser(userData.avatar)}
+              src={user.avatar && getStrapiMedia(user.avatar.formats.thumbnail)}
               width={50}
               height={50}
-              alt={userData.name || 'writer name'}
+              alt={(user.avatar && user.avatar.alternativeText) || ''}
+              size={(user.avatar && user.avatar.formats.thumbnail + '') || ''}
             />
             <div className="mx-4">
-              <p className="font-bold text-color-bold dark:text-color-bold-dark">{userData.name}</p>
-              <p className="text-color-thin dark:text-color-thin-dark">{userData.major}</p>
+              <p className="font-bold text-color-bold dark:text-color-bold-dark">{user.name}</p>
+              <p className="text-color-thin dark:text-color-thin-dark">{user.major}</p>
             </div>
           </div>
-          <p className="text-color-medium w-2/3 py-5 mx-auto text-center dark:text-color-medium-dark">
-            {userData.about}
-          </p>
+          <p className="text-color-medium w-2/3 py-5 mx-auto text-center dark:text-color-medium-dark">{user.about}</p>
           <div className="flex justify-center">
             <SocialMedia variant="facebook" href="/" />
             <SocialMedia variant="youtube" href="/" />
@@ -64,16 +63,13 @@ export default function Writer() {
           </div>
         </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5 my-8">
-          {articlesData.map((item) => (
+          {articles.map((item) => (
             <Card
+              isLoading={articlesLoading}
               title={item.attributes.title}
-              thumbnail={getStrapiMedia(item.attributes.thumbnail)}
-              category={item.attributes.category.data.attributes.name}
-              author={{
-                id: item.attributes.author.data.id,
-                name: item.attributes.author.data.attributes.name,
-                image: getStrapiMedia(item.attributes.author.data.attributes.avatar),
-              }}
+              thumbnail={item.attributes.thumbnail}
+              category={item.attributes.category}
+              author={item.attributes.author}
               slug={item.attributes.slug}
               publishedAt={item.attributes.publishedAt}
               key={item.id}
@@ -96,16 +92,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
     },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: 'blocking' };
 };
 
-export const getStaticProps: GetStaticProps = storeWrapper.getStaticProps(({ dispatch }) => async ({ params }) => {
-  const writerId = Number(params?.id);
+export const getStaticProps: GetStaticProps = storeWrapper.getStaticProps(
+  ({ dispatch }) =>
+    async ({ params, locale }) => {
+      const writerId = Number(params?.id);
 
-  await dispatch(getUserDetail(writerId));
-  await dispatch(getArticlesByWriter(writerId));
+      await dispatch(getUserDetail(writerId));
 
-  return {
-    props: {},
-  };
-});
+      await dispatch(getArticlesByWriter(writerId));
+
+      return {
+        props: {
+          ...(await serverSideTranslations(locale || 'en', ['common', 'header', 'footer'])),
+        },
+        revalidate: 10,
+      };
+    },
+);

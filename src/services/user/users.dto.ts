@@ -1,5 +1,8 @@
 import { Article } from '../article/article.dto';
 import { Formats } from '../../dtos/media.dto';
+import { BaseSingleResponse } from '@/dtos/base';
+
+export type UserResponse = BaseSingleResponse<UserResponseData>;
 
 export interface UserResponseData {
   id: number;

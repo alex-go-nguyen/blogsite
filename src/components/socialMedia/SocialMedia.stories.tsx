@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import SocialMedia from './SocialMedia';
+import { SocialMedia } from './index';
 
 const meta: Meta<typeof SocialMedia> = {
   title: 'ATOMS/SocialMedia',

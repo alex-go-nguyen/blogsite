@@ -1,11 +1,16 @@
+import { PaginationOption } from '@/dtos/api.dto';
 import { Avatar, UpdateUserPayload, UserResponseData } from '@/services/user/users.dto';
-import axiosClient from '@/utils/axiosClient';
+import axiosServer, { axiosClient } from '@/utils/axiosClient';
 import { AxiosResponse } from 'axios';
 
 export const getUserDetailAPI = async (id: number) => {
-  const { data } = await axiosClient.get<UserResponseData>(`/users/${id}`, {
+  const { data } = await axiosServer.get<UserResponseData>(`/users/${id}`, {
     params: {
-      populate: '*',
+      populate: {
+        avatar: {
+          populate: '*',
+        },
+      },
     },
   });
 
@@ -13,7 +18,7 @@ export const getUserDetailAPI = async (id: number) => {
 };
 
 export const getUsersAPI = async () => {
-  const { data } = await axiosClient.get<UserResponseData[]>('/users', {
+  const { data } = await axiosServer.get<UserResponseData[]>('/users', {
     params: {
       populate: {
         avatar: {
@@ -51,16 +56,38 @@ export const updateUserAPI = async (user: UserResponseData, payload: UpdateUserP
     const formData = new FormData();
     formData.append('files', avatar[0]);
 
-    const res = await axiosClient.post<Avatar[]>('/upload', formData, {
+    const { data } = await axiosClient.post<Avatar[]>('/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
 
-    response = await axiosClient.put(`/users/${user.id}`, { ...payload, avatar: res.data[0].id });
+    response = await axiosClient.put(`/users/${user.id}`, { ...payload, avatar: data[0].id });
   } else {
     response = await axiosClient.put(`/users/${user.id}`, { name, about, major });
   }
 
   return response.data;
+};
+
+export const searchUsersAPI = async (searchQuery: string, { page, pageSize }: PaginationOption) => {
+  const { data } = await axiosServer.get<UserResponseData[]>('/users', {
+    params: {
+      _q: searchQuery,
+      populate: {
+        avatar: {
+          populate: '*',
+        },
+        articles: {
+          populate: '*',
+        },
+      },
+      pagination: {
+        page,
+        pageSize,
+      },
+    },
+  });
+
+  return data;
 };

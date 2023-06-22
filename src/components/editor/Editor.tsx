@@ -1,11 +1,10 @@
 import { Avatar } from '@/services/user/users.dto';
-import axiosClient from '@/utils/axiosClient';
+import { axiosClient } from '@/utils/axiosClient';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { FileLoader, UploadAdapter } from '@ckeditor/ckeditor5-upload';
 import type { Editor as IEditor } from '@ckeditor/ckeditor5-core';
-import { ChangeEvent, ChangeEventHandler, ComponentProps, FormEvent } from 'react';
-import { ChangeHandler } from 'react-hook-form';
+import { ChangeEvent, ChangeEventHandler } from 'react';
 
 export type EditorProps = {
   value?: string;
@@ -41,7 +40,7 @@ function uploadPlugin(editor: IEditor) {
                   },
                 });
 
-                resolve({ default: 'http://localhost:1337' + data[0].url });
+                resolve({ default: 'http://127.0.0.1:1337' + data[0].url });
               } catch (error) {
                 reject(error);
               }

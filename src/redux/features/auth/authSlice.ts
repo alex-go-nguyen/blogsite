@@ -33,11 +33,7 @@ export const authSlice = createSlice({
   name: 'Auth',
   initialState,
   reducers: {
-    resetState: (state) => {
-      state.user = null;
-      state.loading = false;
-      state.error = false;
-      state.isAuthenticated = false;
+    resetStateChangePassword: (state) => {
       state.isPasswordChanged = false;
     },
   },
@@ -73,16 +69,13 @@ export const authSlice = createSlice({
       })
 
       .addCase(getMe.pending, (state) => {
-        state.loading = true;
         state.error = false;
       })
       .addCase(getMe.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthenticated = true;
-        state.loading = false;
       })
       .addCase(getMe.rejected, (state, action) => {
-        state.loading = false;
         state.isAuthenticated = false;
       })
 
@@ -105,7 +98,7 @@ export const authSlice = createSlice({
       .addCase(postChangePassword.fulfilled, (state, action) => {
         state.loading = false;
         state.isPasswordChanged = true;
-        state.loading = false;
+        state.error = false;
       })
       .addCase(postChangePassword.rejected, (state, action) => {
         state.loading = false;
@@ -114,5 +107,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { resetState } = authSlice.actions;
+export const { resetStateChangePassword } = authSlice.actions;
 export default authSlice.reducer;

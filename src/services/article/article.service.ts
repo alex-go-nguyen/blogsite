@@ -1,10 +1,12 @@
 import { BaseResponse } from '@/dtos/base';
 import { Article, ArticlesResponse, PostArticlePayload } from '@/services/article/article.dto';
-import axiosClient from '@/utils/axiosClient';
+import axiosServer, { axiosClient } from '@/utils/axiosClient';
 import { Avatar } from '../user/users.dto';
+import { PaginationOption } from '@/dtos/api.dto';
+import { OrderEnum } from '@/constants';
 
-export const getArticlesAPI = async (option: { page?: number }) => {
-  const { data } = await axiosClient.get<ArticlesResponse>('/articles', {
+export const getArticlesAPI = async ({ page, pageSize }: PaginationOption) => {
+  const { data } = await axiosServer.get<ArticlesResponse>('/articles', {
     params: {
       populate: {
         thumbnail: '*',
@@ -17,23 +19,24 @@ export const getArticlesAPI = async (option: { page?: number }) => {
           },
         },
       },
-      ...(option.page && {
-        pagination: {
-          page: option.page,
-          pageSize: 6,
-        },
-      }),
+      sort: {
+        publishedAt: OrderEnum.DESC,
+      },
+      pagination: {
+        page,
+        pageSize,
+      },
     },
   });
 
-  return data.data;
+  return data;
 };
 
 export const getArticleDetailAPI = async (slug: string) => {
-  const { data } = await axiosClient.get<ArticlesResponse>('/articles', {
+  const { data } = await axiosServer.get<ArticlesResponse>('/articles', {
     params: {
       filters: {
-        slug: slug,
+        slug,
       },
       populate: {
         thumbnail: '*',
@@ -43,11 +46,11 @@ export const getArticleDetailAPI = async (slug: string) => {
     },
   });
 
-  return data.data[0].attributes;
+  return data.data[0];
 };
 
-export const getArticlesByWriterAPI = async (writerId: number) => {
-  const { data } = await axiosClient.get<ArticlesResponse>('/articles', {
+export const getArticlesByWriterAPI = async (writerId: number, { page, pageSize }: PaginationOption) => {
+  const { data } = await axiosServer.get<ArticlesResponse>('/articles', {
     params: {
       filters: {
         author: writerId,
@@ -60,6 +63,13 @@ export const getArticlesByWriterAPI = async (writerId: number) => {
         author: {
           populate: '*',
         },
+        pagination: {
+          page,
+          pageSize,
+        },
+      },
+      sort: {
+        publishedAt: OrderEnum.DESC,
       },
     },
   });
@@ -77,8 +87,45 @@ export const postArticleAPI = async (payload: PostArticlePayload) => {
     },
   });
 
+  payload.data.content = payload.data.content.replaceAll(/http:\/\/127.0.0.1:1337\/uploads/g, '/uploads');
+
   const { data } = await axiosClient.post<BaseResponse<Article>>('/articles', {
     data: { ...payload.data, thumbnail: res.data[0].id },
+  });
+
+  return data;
+};
+
+export const searchArticlesAPI = async (searchQuery: string, { page, pageSize }: PaginationOption, sort?: string) => {
+  const { data } = await axiosServer.get<ArticlesResponse>('/articles', {
+    params: {
+      _q: searchQuery,
+      category: {
+        data: {
+          attributes: {
+            name: 'technology',
+          },
+        },
+      },
+      populate: {
+        thumbnail: '*',
+        category: {
+          populate: '*',
+        },
+        author: {
+          populate: {
+            avatar: '*',
+          },
+        },
+      },
+      sort: {
+        publishedAt: sort || 'desc',
+      },
+      pagination: {
+        page,
+        pageSize,
+      },
+    },
   });
 
   return data;

@@ -1,6 +1,4 @@
 import Logo from '@/assets/logo';
-import Input from '@/components/Input/Input';
-import Button from '@/components/button/Button';
 import Link from 'next/link';
 import { FaLock } from 'react-icons/fa';
 import { FaFacebook, FaGithub, FaGoogle, FaUser } from 'react-icons/fa';
@@ -11,8 +9,11 @@ import { useRouter } from 'next/router';
 import { LoginPayload } from '@/services/auth/auth.dto';
 import { useEffect } from 'react';
 import { SEO } from '@/services/homepage/homepage.dto';
-import Seo from '@/components/seo/seo';
-import { useAuth } from '@/components/context/auth';
+import { useAuth } from '@/hooks/useAuth';
+import { GetStaticProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
+import { Button, Input, Seo } from '@/components';
 
 const schema = object({
   identifier: string().required('Required'),
@@ -20,9 +21,11 @@ const schema = object({
 });
 
 export default function Login() {
+  const { t } = useTranslation('login');
+
   const router = useRouter();
 
-  const { user, loading, error, login } = useAuth({});
+  const { user, loading, error, login } = useAuth();
 
   const { register, handleSubmit } = useForm<LoginPayload>({ resolver: yupResolver(schema) });
 
@@ -30,6 +33,15 @@ export default function Login() {
 
   const seo: SEO = {
     metaTitle: 'Login',
+  };
+
+  const translate = {
+    title: t('title'),
+    forgotPassword: t('forgotPassword'),
+    register: t('register'),
+    login: t('login'),
+    error: t('error'),
+    password: t('password'),
   };
 
   useEffect(() => {
@@ -42,40 +54,42 @@ export default function Login() {
     <>
       <Seo seo={seo} />
       <div className="h-screen flex items-center justify-center text-center">
-        <div className="w-2/3 lg:w-1/2 shadow-2xl dark:shadow-blue-500/50 p-12 bg-white dark:bg-dark-mode rounded-lg overflow-hidden ">
+        <div className="w-3/4 lg:w-1/2 shadow-2xl dark:shadow-blue-500/50 p-12 bg-white dark:bg-dark-mode rounded-lg overflow-hidden ">
           <form onSubmit={handleSubmit(onSubmitHandler)}>
-            <div className="flex justify-center">
+            <Link href="/" className="flex justify-center">
               <Logo />
-            </div>
-            <p className="font-bold text-2xl my-4">Login into Meta blog</p>
-            {error && (
-              <div className="bg-red-50 dark:bg-dark-mode text-red-500 py-2 rounded-md">
-                Wrong username/email or password !
-              </div>
-            )}
+            </Link>
+            <p className="font-bold text-xl lg:text-2xl my-4">{translate.title}</p>
+            {error && <div className="bg-red-50 dark:bg-dark-mode text-red-500 py-2 rounded-md">{translate.error}</div>}
             <Input {...register('identifier')} placeholder="Email" startDecorator={<FaUser />} className="my-2" />
             <Input
               {...register('password')}
               type="password"
-              placeholder="Password"
+              placeholder={translate.password}
               startDecorator={<FaLock />}
               className="my-2"
             />
-            <Button variant="solid" loading={loading} loadingPosition="start" className="w-full my-4">
-              Login
+            <Button
+              variant="solid"
+              disabled={loading}
+              loading={loading}
+              loadingPosition="start"
+              className="w-full my-4"
+            >
+              {translate.login}
             </Button>
             <div className="flex justify-between text-blue-400 ">
               <Link href="/forgot-password" className="hover:text-red-500">
-                Forgot password
+                {translate.forgotPassword}
               </Link>
               <Link href="/register" className="hover:text-red-500">
-                Register
+                {translate.register}
               </Link>
             </div>
           </form>
           <div>
             <h1 className="font-semibold text-xl relative text-blue-500 py-4">Login with others ways</h1>
-            <div className="grid grid-cols-3 gap-4 text-lg">
+            <div className="grid grid-cols-3 gap-4 text-xs lg:text-lg">
               <Button variant="outlined" className="col-span-1 flex items-center justify-center">
                 <span className="mx-2 text-blue-600">
                   <FaFacebook />
@@ -103,3 +117,9 @@ export default function Login() {
 }
 
 Login.Layout = 'Empty';
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: { ...(await serverSideTranslations(locale || 'en', ['common', 'login'])) },
+  };
+};

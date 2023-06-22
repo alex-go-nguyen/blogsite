@@ -1,6 +1,6 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode, useState } from 'react';
 import { BsPersonFill, BsPersonVcardFill } from 'react-icons/bs';
-import { MdHome, MdSecurity } from 'react-icons/md';
+import { MdHome, MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdSecurity } from 'react-icons/md';
 import { TfiAngleDown } from 'react-icons/tfi';
 import useBoolean from '@/hooks/useBoolean';
 import { HiKey } from 'react-icons/hi';
@@ -11,9 +11,10 @@ export interface NavbarSubMenuProps extends HTMLAttributes<HTMLDivElement> {
   startIcons?: ReactNode;
   title?: string;
   href?: string;
+  isCollapse?: boolean;
 }
 
-export const NavbarSubMenu = ({ startIcons, title, children, className }: NavbarSubMenuProps) => {
+export const NavbarSubMenu = ({ startIcons, title, children, className, isCollapse }: NavbarSubMenuProps) => {
   const { value, toggle } = useBoolean(false);
   return (
     <div>
@@ -22,7 +23,7 @@ export const NavbarSubMenu = ({ startIcons, title, children, className }: Navbar
         onClick={toggle}
       >
         {startIcons}
-        <span className="mx-4">{title}</span>
+        <span className={cx('mx-4', isCollapse && 'hidden')}>{title}</span>
         <TfiAngleDown className={cx('text-xs transition-all duration-200 absolute right-4', value && 'rotate-180 ')} />
       </div>
       <div
@@ -37,7 +38,7 @@ export const NavbarSubMenu = ({ startIcons, title, children, className }: Navbar
   );
 };
 
-export const NavbarSubMenuItem = ({ children, href = '#', className }: NavbarSubMenuProps) => {
+export const NavbarSubMenuItem = ({ children, href = '#' }: NavbarSubMenuProps) => {
   const router = useRouter();
 
   return (
@@ -47,13 +48,14 @@ export const NavbarSubMenuItem = ({ children, href = '#', className }: NavbarSub
   );
 };
 
-export const SubMenuItem = ({ children, href = '#', className }: NavbarSubMenuProps) => {
+export const SubMenuItem = ({ children, href, className, ...props }: NavbarSubMenuProps) => {
   const router = useRouter();
 
   return (
     <div
       className={cx('flex items-center py-2 cursor-pointer pl-4 pr-10 hover:bg-blue-200', className)}
-      onClick={() => router.push(href)}
+      {...(href && { onClick: () => router.push(href) })}
+      {...props}
     >
       {children}
     </div>
@@ -61,24 +63,38 @@ export const SubMenuItem = ({ children, href = '#', className }: NavbarSubMenuPr
 };
 
 export default function AccountNavbar({ className }: HTMLAttributes<HTMLDivElement>) {
+  const [isCollapse, setIsCollapse] = useState(false);
+
   return (
-    <div className={cx('text-base text-color-bold dark:text-color-bold-dark transition-all duration-100 ', className)}>
-      <SubMenuItem href="/account">
-        <MdHome />
-        <span className="mx-4">Home</span>
-      </SubMenuItem>
-      <NavbarSubMenu startIcons={<BsPersonVcardFill />} title="My Profile" className="py-2">
-        <NavbarSubMenuItem href="/account/profile/personal">
-          <BsPersonFill />
-          <span className="mx-4">Personal Info</span>
-        </NavbarSubMenuItem>
-      </NavbarSubMenu>
-      <NavbarSubMenu startIcons={<MdSecurity />} title="Security" className="py-2">
-        <NavbarSubMenuItem href="/account/security/password">
-          <HiKey />
-          <span className="mx-4"> Password</span>
-        </NavbarSubMenuItem>
-      </NavbarSubMenu>
+    <div>
+      <div
+        className={cx(
+          'text-base text-color-bold dark:text-color-bold-dark transition-all duration-100 disable',
+          isCollapse && '!text-2xl',
+          className,
+        )}
+      >
+        <SubMenuItem href="/account">
+          <MdHome />
+          <span className={cx('mx-4', isCollapse && 'hidden')}>Home</span>
+        </SubMenuItem>
+        <NavbarSubMenu startIcons={<BsPersonVcardFill />} title="My Profile" className="py-2" isCollapse={isCollapse}>
+          <NavbarSubMenuItem href="/account/profile/personal" isCollapse>
+            <BsPersonFill />
+            <span className={cx('mx-4', isCollapse && 'hidden')}>Personal Info</span>
+          </NavbarSubMenuItem>
+        </NavbarSubMenu>
+        <NavbarSubMenu startIcons={<MdSecurity />} title="Security" className="py-2" isCollapse={isCollapse}>
+          <NavbarSubMenuItem href="/account/security/password">
+            <HiKey />
+            <span className={cx('mx-4', isCollapse && 'hidden')}> Password</span>
+          </NavbarSubMenuItem>
+        </NavbarSubMenu>
+        <SubMenuItem className="border-t border-b" onClick={() => setIsCollapse(!isCollapse)}>
+          {isCollapse ? <MdKeyboardDoubleArrowRight /> : <MdKeyboardDoubleArrowLeft />}
+          <span className={cx('mx-4', isCollapse && 'hidden')}>Collapse</span>
+        </SubMenuItem>
+      </div>
     </div>
   );
 }

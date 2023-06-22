@@ -1,5 +1,5 @@
 import { Article } from '../article/article.dto';
-import { BasePaginationResponse, BaseSingleResponse } from '../../dtos/base';
+import { BasePaginationResponse, BaseResponse, BaseSingleResponse } from '../../dtos/base';
 
 export type CategoriesResponse = BasePaginationResponse<Category>;
 
@@ -10,5 +10,5 @@ export interface Category {
   slug: string;
   createdAt: Date;
   updatedAt: Date;
-  articles: Article[];
+  articles: BaseResponse<Article>;
 }

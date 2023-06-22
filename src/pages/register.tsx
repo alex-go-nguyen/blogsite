@@ -1,6 +1,4 @@
 import Logo from '@/assets/logo';
-import Input from '@/components/Input/Input';
-import Button from '@/components/button/Button';
 import { postRegister } from '@/redux/features/auth/authSlice';
 import { useAppDispatch } from '@/redux/store';
 import { RegisterPayload } from '@/services/auth/auth.dto';
@@ -11,8 +9,13 @@ import { FaFacebook, FaGithub, FaGoogle, FaLock, FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { object, ref, string } from 'yup';
 import cx from 'classnames';
-import { useAuth } from '@/components/context/auth';
-import { useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useEffect, useTransition } from 'react';
+import { GetStaticProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
+import { Button, Input } from '@/components';
 
 type RegisterField = RegisterPayload & {
   confirmPassword: string;
@@ -32,11 +35,13 @@ const schema = object({
     .oneOf([ref('password')], 'Password does not match'),
 });
 export default function SignUp() {
+  const { t } = useTranslation('register');
+
   const router = useRouter();
 
   const dispatch = useAppDispatch();
 
-  const { user, loading, error, register: doRegister } = useAuth({});
+  const { user, loading, error, register: doRegister } = useAuth();
 
   const {
     register,
@@ -46,7 +51,13 @@ export default function SignUp() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmitHandler = (registerData: RegisterPayload) => dispatch(postRegister(registerData));
+  const onSubmitHandler = (registerData: RegisterPayload) => doRegister(registerData);
+
+  const translate = {
+    title: t('title'),
+    register: t('register'),
+    error: t('error'),
+  };
 
   useEffect(() => {
     if (!loading && user) {
@@ -56,17 +67,13 @@ export default function SignUp() {
 
   return (
     <div className="h-screen flex items-center justify-center text-center">
-      <div className="w-1/2 shadow-2xl dark:shadow-blue-500/50 p-12 bg-white dark:bg-dark-mode rounded-lg overflow-hidden ">
+      <div className="w-3/4 lg:w-1/2 shadow-2xl dark:shadow-blue-500/50 p-12 bg-white dark:bg-dark-mode rounded-lg overflow-hidden ">
         <form onSubmit={handleSubmit(onSubmitHandler)}>
-          <div className="flex justify-center">
+          <Link href="/" className="flex justify-center">
             <Logo />
-          </div>
-          <p className="font-bold text-2xl my-4">Sign Up To Be a Member</p>
-          {error && (
-            <p className="bg-red-50 dark:bg-dark-mode text-red-500 py-2 rounded-md">
-              Email or username already exists in the system, please try again!
-            </p>
-          )}
+          </Link>
+          <p className="font-bold text-xl lg:text-2xl my-4">{translate.title}</p>
+          {error && <p className="bg-red-50 dark:bg-dark-mode text-red-500 py-2 rounded-md">{translate.error}</p>}
 
           <Input
             {...register('username')}
@@ -101,12 +108,12 @@ export default function SignUp() {
           />
           <p className="text-red-500 text-left text-sm mb-2">{errors.confirmPassword?.message}</p>
           <Button variant="solid" loading={loading} loadingPosition="start" className="w-full my-4">
-            Register
+            {translate.register}
           </Button>
         </form>
         <div>
           <div className="font-semibold text-xl text-blue-500 py-4 ">Login with others ways</div>
-          <div className="grid grid-cols-3 gap-4 text-lg">
+          <div className="grid grid-cols-3 gap-4 text-xs lg:text-lg">
             <Button variant="outlined" className="col-span-1 flex items-center justify-center">
               <span className="mx-2 text-blue-600">
                 <FaFacebook />
@@ -133,3 +140,9 @@ export default function SignUp() {
 }
 
 SignUp.Layout = 'Empty';
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: { ...(await serverSideTranslations(locale || 'en', ['common', 'register'])) },
+  };
+};

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Popper from './Popper';
+import { Popper } from './index';
 
 const meta: Meta<typeof Popper> = {
   title: 'ATOMS/Popper',

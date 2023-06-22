@@ -1,8 +1,8 @@
-import axiosClient from '@/utils/axiosClient';
+import axiosServer from '@/utils/axiosClient';
 import { GlobalResponse } from './global.dto';
 
 export const getGlobal = async () => {
-  const { data } = await axiosClient.get<GlobalResponse>('/global', {
+  const { data } = await axiosServer.get<GlobalResponse>('/global', {
     params: {
       populate: {
         favicon: '*',

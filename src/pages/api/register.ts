@@ -29,7 +29,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
       proxyResponse.on('end', () => {
         try {
-          const { jwt } = JSON.parse(apiResponseBody);
+          const { jwt, user } = JSON.parse(apiResponseBody);
 
           if (!jwt) {
             (res as NextApiResponse).status(401).json({ message: 'invalid username or password' });
@@ -43,7 +43,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
             sameSite: 'lax',
           });
 
-          (res as NextApiResponse).status(200).json({ message: 'Register successfully' });
+          (res as NextApiResponse).status(200).json({ ...user });
         } catch (error) {
           (res as NextApiResponse).status(400).json({ message: 'oops, something went wrong' });
         }
@@ -57,7 +57,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
     };
 
     httpProxyMiddleware(req, res, {
-      target: process.env.NEXT_PUBLIC_API_URL,
+      target: 'http://127.0.0.1:1337',
       pathRewrite: [
         {
           patternStr: '^/api/register',

@@ -1,6 +1,5 @@
 import Cookies from 'cookies';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import httpProxy from 'http-proxy';
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 import { ProxyResCallback } from 'http-proxy';
 
@@ -20,6 +19,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
   }
 
   return new Promise((resolve, rejects) => {
+    const cookies = new Cookies(req, res);
+    const accessToken = cookies.get('access_token');
+    if (accessToken) {
+      req.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    // don't forward cookies to API server
+    req.headers.cookie = '';
+
     const handleChangePasswordResponse: ProxyResCallback = (proxyResponse, req, res) => {
       let apiResponseBody = '';
 
@@ -31,19 +39,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
         try {
           const { jwt } = JSON.parse(apiResponseBody);
 
-          console.log('jwt', jwt);
-
           if (!jwt) {
             (res as NextApiResponse).status(401).json({ message: 'Invalid current password' });
             rejects(true);
           }
-
-          const cookies = new Cookies(req, res, { secure: process.env.NODE_ENV !== 'development' });
-
-          cookies.set('access_token', jwt, {
-            httpOnly: true,
-            sameSite: 'lax',
-          });
 
           (res as NextApiResponse).status(200).json({ message: 'Change passsword successfully' });
         } catch (error) {
@@ -59,7 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
     };
 
     httpProxyMiddleware(req, res, {
-      target: process.env.NEXT_PUBLIC_API_URL,
+      target: 'http://127.0.0.1:1337',
       pathRewrite: [
         {
           patternStr: '^/api/change-password',

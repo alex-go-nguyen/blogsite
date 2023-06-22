@@ -2,18 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 @import url('react-toastify/dist/ReactToastify.css');
+@import url('./ckeditor.css');
+@import url('nprogress/nprogress.css');
 
 :root {
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-}
-
-.dark .ck-editor {
-  color: black;
-}
-
-.ck-editor {
-  border-radius: 16px;
-  background: transparent;
 }

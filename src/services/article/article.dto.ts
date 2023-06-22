@@ -1,9 +1,11 @@
-import { AuthorResponse } from '../../dtos/author.dto';
-import { BasePaginationResponse } from '../../dtos/base';
+import { BasePaginationResponse, BaseSingleResponse } from '../../dtos/base';
 import { CategoryResponse } from '../category/category.dto';
 import { Media } from '../../dtos/media.dto';
+import { UserResponse } from '../user/users.dto';
+import { AuthorResponse } from '@/dtos/author.dto';
 
 export type ArticlesResponse = BasePaginationResponse<Article>;
+export type ArticleResponse = BaseSingleResponse<Article>;
 
 export interface Article {
   title: string;

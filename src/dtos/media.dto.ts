@@ -27,13 +27,13 @@ export interface MediaAttributes {
 }
 
 export interface Formats {
-  thumbnail: Large;
-  small: Large;
-  medium: Large;
-  large: Large;
+  thumbnail: ImageType;
+  small: ImageType;
+  medium: ImageType;
+  large: ImageType;
 }
 
-export interface Large {
+export interface ImageType {
   name: string;
   hash: string;
   ext: string;

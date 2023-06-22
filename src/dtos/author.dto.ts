@@ -16,7 +16,7 @@ export interface Author {
   major: string;
   about: string;
   name: string;
-  avatar: Media;
+  avatar?: Media;
 }
 
 export enum Provider {

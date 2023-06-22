@@ -1,12 +1,12 @@
 import { HomepageResponse } from '@/services/homepage/homepage.dto';
-import axiosClient from '@/utils/axiosClient';
+import axiosServer from '@/utils/axiosClient';
 
-export const getHomepage = async () => {
-  const { data } = await axiosClient.get<HomepageResponse>('/homepage', {
+export const getHomepageAPI = async () => {
+  const { data } = await axiosServer.get<HomepageResponse>('/homepage', {
     params: {
       populate: {
         favicon: '*',
-        defaultSeo: {
+        seo: {
           populate: '*',
         },
       },

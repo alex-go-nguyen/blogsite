@@ -2,17 +2,19 @@ import { BaseResponseData } from '@/dtos/base';
 import { Category } from '@/services/category/category.dto';
 import { getCategoriesAPI } from '@/services/category/category.service';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
+import { HydrateAction } from '../users/userSlice';
 
 interface CategoriesState {
   data: BaseResponseData<Category>[];
   loading: boolean;
-  error: string | null;
+  error: boolean;
 }
 
 const initialState: CategoriesState = {
   data: [],
   loading: false,
-  error: null,
+  error: false,
 };
 
 export const getCategories = createAsyncThunk('Categoriess/getCategories', () => getCategoriesAPI());
@@ -22,16 +24,23 @@ export const categoriesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getCategories.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getCategories.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.loading = false;
-    });
-    builder.addCase(getCategories.rejected, (state) => {
-      state.loading = false;
-      state.error = 'Error occured';
-    });
+    builder
+      .addCase(HYDRATE, (state, action: HydrateAction) => {
+        return {
+          ...state,
+          ...action.payload.categories,
+        };
+      })
+      .addCase(getCategories.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getCategories.fulfilled, (state, action) => {
+        state.data = action.payload.data;
+        state.loading = false;
+      })
+      .addCase(getCategories.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      });
   },
 });

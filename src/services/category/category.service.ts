@@ -1,8 +1,33 @@
 import { CategoriesResponse } from '@/services/category/category.dto';
-import axiosClient from '@/utils/axiosClient';
+import axiosServer from '@/utils/axiosClient';
 
 export const getCategoriesAPI = async () => {
-  const { data } = await axiosClient.get<CategoriesResponse>('/categories', { params: { populate: '*' } });
+  const { data } = await axiosServer.get<CategoriesResponse>('/categories', { params: { populate: '*' } });
 
-  return data.data;
+  return data;
+};
+
+export const getCategoryDetailAPI = async (slug: string) => {
+  const { data } = await axiosServer.get<CategoriesResponse>('/categories', {
+    params: {
+      filters: {
+        slug,
+      },
+      populate: {
+        articles: {
+          populate: {
+            thumbnail: '*',
+            category: {
+              populate: '*',
+            },
+            author: {
+              populate: '*',
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return data.data[0].attributes;
 };

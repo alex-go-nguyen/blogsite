@@ -22,7 +22,11 @@ export const postArticle = createAsyncThunk('article/postArticle', (payload: Pos
 export const postArticleSlice = createSlice({
   name: 'article',
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      (state.data = null), (state.error = false);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(postArticle.pending, (state) => {
@@ -38,3 +42,5 @@ export const postArticleSlice = createSlice({
       });
   },
 });
+
+export const { resetState } = postArticleSlice.actions;

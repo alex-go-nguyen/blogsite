@@ -59,7 +59,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
     };
 
     httpProxyMiddleware(req, res, {
-      target: process.env.NEXT_PUBLIC_API_URL,
+      target: 'http://127.0.0.1:1337',
       pathRewrite: [
         {
           patternStr: '^/api/login',

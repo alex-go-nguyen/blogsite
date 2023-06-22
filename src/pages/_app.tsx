@@ -3,18 +3,17 @@ import { Provider } from 'react-redux';
 import type { AppContext, AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import { storeWrapper } from '@/redux/store';
-import { getStrapiMedia } from '@/utils/media';
 import Head from 'next/head';
 import { GlobalAttributes } from '@/services/global/global.dto';
 import { NextPage } from 'next';
-import { LayoutKeys, Layouts } from '@/components/layout/Layout';
-import { AuthProvider } from '@/components/context/auth';
-import '@/styles/globals.css';
 import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
 import { Router } from 'next/router';
 import App from 'next/app';
 import { getGlobal } from '@/services/global/global.service';
+import { appWithTranslation } from 'next-i18next';
+import { LayoutKeys, Layouts, Seo, AuthProvider } from '@/components';
+import '@/styles/globals.css';
+import { getStrapiMedia } from '@/utils/media';
 
 export type NextComponentType<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -42,11 +41,25 @@ const MyApp = ({ Component, ...rest }: MyAppProps) => {
 
   const Layout = Layouts[Component.Layout] ?? ((page: ReactElement) => page);
 
+  console.log(global.attributes.favicon.data);
+
   return (
     <>
       <Head>
-        <link rel="shortcut icon" href={getStrapiMedia(global.attributes.favicon)} />
+        <link rel="shortcut icon" href={getStrapiMedia(global.attributes.favicon.data.attributes.formats.thumbnail)} />
+        <link
+          rel="shortcut icon"
+          href={getStrapiMedia(global.attributes.favicon.data.attributes.formats.thumbnail)}
+          hrefLang="en-US"
+        />
+        <link
+          rel="shortcut icon"
+          href={getStrapiMedia(global.attributes.favicon.data.attributes.formats.thumbnail)}
+          hrefLang="vi"
+        />
       </Head>
+      <Seo seo={global.attributes.defaultSeo} />
+
       <GlobalContext.Provider value={global.attributes}>
         <ThemeProvider attribute="class">
           <Provider store={store}>
@@ -72,4 +85,4 @@ MyApp.getInitialProps = async (ctx: AppContext) => {
   return { ...appProps, pageProps: { global: data } };
 };
 
-export default MyApp;
+export default appWithTranslation(MyApp);

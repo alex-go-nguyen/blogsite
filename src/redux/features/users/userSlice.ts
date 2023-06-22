@@ -9,6 +9,7 @@ interface UsersState {
   data: UserResponseData | null;
   loading: boolean;
   error: boolean;
+  isUpdated: boolean;
 }
 
 export interface HydrateAction {
@@ -20,6 +21,7 @@ const initialState: UsersState = {
   data: null,
   loading: false,
   error: false,
+  isUpdated: false,
 };
 
 export const getUserDetail = createAsyncThunk('users/getUserDetail', (id: number) => getUserDetailAPI(id));
@@ -31,7 +33,12 @@ export const updateUser = createAsyncThunk(
 export const userDetailSlice = createSlice({
   name: 'userDetail',
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.error = false;
+      state.isUpdated = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(HYDRATE, (state, action: HydrateAction) => {
@@ -57,11 +64,15 @@ export const userDetailSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.data = action.payload;
+        state.isUpdated = true;
         state.loading = false;
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
+        state.isUpdated = false;
         state.error = true;
       });
   },
 });
+
+export const { resetState } = userDetailSlice.actions;
