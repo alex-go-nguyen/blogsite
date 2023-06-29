@@ -95,6 +95,22 @@ Test file must have extension .test.ts(x)
 
 Check the [Jest document](https://jestjs.io/docs/getting-started) to get you started!
 
+### Cypress (End to end testing)
+
+**To run cypress**
+
+```
+yarn run cypress open
+```
+
+Then you can see **'end to end test'**, click it to run end to end test
+
+Test file must be in /cypress/e2e/
+
+Create file with \*.cy.js in /cypress/e2e/ to create a new end to end test.
+
+Check the [Jest document](https://docs.cypress.io/guides/getting-started/installing-cypress) to get you started!
+
 ## Deployment
 
 **Deployed on Vercel:**
@@ -104,5 +120,8 @@ Contact your team to join Vercel team. Then go to `Site setting/Build & deploy` 
 
 **Production:** [Production](https://blogowl.vercel.app//)
 
+## Database Diagram
+
+[![](https://mermaid.ink/img/pako:eNqFU8tugzAQ_BXL5_AD3NIURZGSIiVUUSsuBm-IK3uN_GhVkfx7HQhFiqnq02pmWHbG647WmgNNaZIkJTrhJKTkaZuv8-OWHLOnw6bISuxJMM-CNYapEkk4r4dsTy6XJNEdWe6LzWqbpeTMbMyu8t0ueyke2W6ob8c6I7Ah3oJBpiAiZkFQTMgIbY3-FBxMTDBrv7ThE1FpLYEhqTWehFHAo28U-9BxJ1Zp7yYUvarAEGacqOV9zGuJQ3FP5jeKZZGt8_1bSiqQGhs7r4oCGwVxZv2VRSgHWxvROqEx4qz0TdzmHFzgXKAhHQfoHnyNRmYmmr2s6adTi8Hl36ZHQffPTHRBFZiwDTzscS8uqTtDmIKmoeRwYl66kpZ4kzLv9OEba5o642FBfcuZg_tq0_TEpA0ocOG02Q1vo38iC9oyfNd61Fx_AIG6_Fo?type=png)](https://mermaid.live/edit#pako:eNqFU8tugzAQ_BXL5_AD3NIURZGSIiVUUSsuBm-IK3uN_GhVkfx7HQhFiqnq02pmWHbG647WmgNNaZIkJTrhJKTkaZuv8-OWHLOnw6bISuxJMM-CNYapEkk4r4dsTy6XJNEdWe6LzWqbpeTMbMyu8t0ueyke2W6ob8c6I7Ah3oJBpiAiZkFQTMgIbY3-FBxMTDBrv7ThE1FpLYEhqTWehFHAo28U-9BxJ1Zp7yYUvarAEGacqOV9zGuJQ3FP5jeKZZGt8_1bSiqQGhs7r4oCGwVxZv2VRSgHWxvROqEx4qz0TdzmHFzgXKAhHQfoHnyNRmYmmr2s6adTi8Hl36ZHQffPTHRBFZiwDTzscS8uqTtDmIKmoeRwYl66kpZ4kzLv9OEba5o642FBfcuZg_tq0_TEpA0ocOG02Q1vo38iC9oyfNd61Fx_AIG6_Fo)
 Cheers 🍺🍺
 Happy coding!
