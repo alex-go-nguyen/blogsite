@@ -12,13 +12,13 @@ import { getStrapiMedia } from '@/utils/media';
 import { FaUser } from 'react-icons/fa';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 import { useTranslation } from 'next-i18next';
-import cx from 'classnames';
 import { Button, Input, MiniNavigation, Popper, Select, SwitchMode } from '@/components';
+import cx from 'classnames';
+import { useAppSelector } from '@/redux/store';
 
 export type SearchPayload = {
   searchQuery: string;
@@ -41,7 +41,9 @@ export function Header() {
 
   const { register, handleSubmit } = useForm<SearchPayload>({ resolver: yupResolver(schema) });
 
-  const { user, logout } = useAuth({});
+  const { user, logout } = useAuth();
+
+  const { data: categories } = useAppSelector((state) => state.categories);
 
   const translate = {
     home: t('home'),
@@ -53,6 +55,7 @@ export function Header() {
     yourPost: t('yourPost'),
     account: t('account'),
     logout: t('logout'),
+    search: t('search'),
   };
 
   const { pathname, asPath, query, locale } = router;
@@ -67,12 +70,7 @@ export function Header() {
   };
 
   return (
-    <motion.div
-      initial={{ y: -250 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 1, type: 'spring' }}
-      className="container grid grid-cols-3 lg:grid-cols-12 justify-between mx-auto py-6"
-    >
+    <div className="container grid grid-cols-3 lg:grid-cols-12 justify-between mx-auto py-6">
       <div className="lg:hidden col-span-1 z-20 order-1">
         <span className="text-4xl cursor-pointer flex" onClick={toggleMenu}>
           <AiOutlineMenu />
@@ -89,7 +87,7 @@ export function Header() {
               {translate.home}
             </Link>
             <Link
-              href="/blog"
+              href={`/category/${categories?.[0]?.attributes.slug}`}
               className="px-4 mx-2 py-4 cursor-pointer hover:bg-gray-200 transition-all duration-100 rounded-lg dark:hover:bg-slate-500 active:bg-gray-300 dark:active:bg-slate-700 block"
               onClick={closeMenu}
             >
@@ -101,23 +99,30 @@ export function Header() {
       <Link
         href="/"
         className="flex justify-center items-center lg:flex lg:h-full text-black dark:text-white lg:col-span-2 order-1"
+        data-cy="logo"
       >
         <Logo />
       </Link>
       <ul className="hidden lg:flex md:col-span-4 lg:col-span-3 justify-center items-center text-color-bold dark:text-white order-2">
-        <li className="px-4 mx-2 py-2 cursor-pointer hover:bg-gray-200 transition-all duration-100 rounded-lg dark:hover:bg-slate-500">
-          <Link href="/">{translate.home}</Link>
-        </li>
-        <li className="px-4 mx-2 py-2 cursor-pointer hover:bg-gray-200 transition-all duration-100 rounded-lg dark:hover:bg-slate-500">
-          <Link href="/blog">{translate.blog}</Link>
-        </li>
+        <Link
+          href="/"
+          className="px-4 mx-2 py-2 cursor-pointer hover:bg-gray-200 transition-all duration-100 rounded-lg dark:hover:bg-slate-500"
+        >
+          {translate.home}
+        </Link>
+        <Link
+          href={`/category/${categories?.[0]?.attributes.slug}`}
+          className="px-4 mx-2 py-2 cursor-pointer hover:bg-gray-200 transition-all duration-100 rounded-lg dark:hover:bg-slate-500"
+        >
+          {translate.blog}
+        </Link>
       </ul>
       <form
         className={cx('order-7 mt-5 lg:m-0 lg:order-3 lg:block col-span-3', user && 'col-span-4')}
         onSubmit={handleSubmit(onSubmitHandler)}
       >
         <Input
-          placeholder="Search"
+          placeholder={translate.search}
           endDecorator={<BiSearch />}
           className="bg-gray-100 dark:bg-search-dark dark:border-dark-mode"
           {...register('searchQuery')}
@@ -147,6 +152,7 @@ export function Header() {
                 alt={(user.avatar && user.avatar.alternativeText) || ''}
                 onClick={toggleDropdown}
                 size={(user.avatar && user.avatar.formats.thumbnail + '') || ''}
+                data-cy="toggle-avatar"
               />
               <Popper isOpen={isOpenDropdown} onClose={closeDropdown} onItemClick={closeDropdown}>
                 <Link
@@ -170,16 +176,10 @@ export function Header() {
                   <ImProfile />
                   <span className="ml-3">{translate.account}</span>
                 </Link>
-                <Link
-                  href="/"
-                  className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white pl-4 py-2 flex items-center pr-8"
-                >
-                  <MdNote />
-                  <span className="ml-3">{translate.yourPost}</span>
-                </Link>
                 <div
                   className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white pl-4 py-2 flex items-center pr-8 border-t dark:border-dark-mode"
                   onClick={handleLogout}
+                  data-cy="logout"
                 >
                   <MdLogout />
                   <span className="ml-3">{translate.logout}</span>
@@ -193,10 +193,20 @@ export function Header() {
               <MdLogin />
             </span>
             <span className="hidden lg:flex text-sm">
-              <Button variant="text" className="mx-1" onClick={() => router.push('/login')}>
+              <Button
+                variant="text"
+                className="mx-1"
+                onClick={() => router.push('/login')}
+                aria-label={translate.signIn}
+              >
                 {translate.signIn}
               </Button>
-              <Button variant="solid" className="mx-1" onClick={() => router.push('/register')}>
+              <Button
+                variant="solid"
+                className="mx-1"
+                onClick={() => router.push('/register')}
+                aria-label={translate.signUp}
+              >
                 {translate.signUp}
               </Button>
             </span>
@@ -207,15 +217,15 @@ export function Header() {
         <Select
           defaultValue={locale || 'en'}
           onChange={(e) => router.push({ pathname, query }, asPath, { locale: e.target.value })}
-          className="w-fit pr-4 border-blue-400 text-blue-500 outline-none dark:border-blue-600"
+          className="w-fit pr-4 border-blue-400 text-blue-500 outline-none dark:border-primary"
         >
           <option value="en">ENG</option>
-          <option value="vi">VI</option>
+          <option value="vi">VIE</option>
         </Select>
       </div>
       <div className="hidden lg:flex col-span-1 flex-row-reverse order-6">
         <SwitchMode onClick={() => (theme === 'dark' ? setTheme('light') : setTheme('dark'))} />
       </div>
-    </motion.div>
+    </div>
   );
 }

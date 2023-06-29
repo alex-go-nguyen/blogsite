@@ -43,11 +43,7 @@ export const articlesSlice = createSlice({
   initialState,
   reducers: {
     addMoreData: (state, action) => {
-<<<<<<< HEAD
       state.data = [...state.data, ...action.payload.data];
-=======
-      state.data = state.data.concat(action.payload.data);
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
       if (state.data.length === action.payload.meta.pagination.total) {
         state.isMaximum = true;
       }
@@ -80,11 +76,7 @@ export const articlesSlice = createSlice({
         state.loading = true;
       })
       .addCase(getMoreArticles.fulfilled, (state, action) => {
-<<<<<<< HEAD
         state.data = [...state.data, ...action.payload.data];
-=======
-        state.data = state.data.concat(action.payload.data);
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
         if (state.data.length === action.payload.meta.pagination.total) {
           state.isMaximum = true;
         }

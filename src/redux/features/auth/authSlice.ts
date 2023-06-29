@@ -8,11 +8,7 @@ export interface AuthState {
   user: UserResponseData | null;
   loading: boolean;
   error: boolean;
-<<<<<<< HEAD
   isAuthenticated: boolean;
-=======
-  isAuthenticated?: boolean;
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   isPasswordChanged: boolean;
 }
 
@@ -20,10 +16,7 @@ const initialState: AuthState = {
   user: null,
   loading: false,
   error: false,
-<<<<<<< HEAD
   isAuthenticated: false,
-=======
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   isPasswordChanged: false,
 };
 
@@ -44,12 +37,9 @@ export const authSlice = createSlice({
     resetStateChangePassword: (state) => {
       state.isPasswordChanged = false;
     },
-<<<<<<< HEAD
     resetStateError: (state) => {
       state.error = false;
     },
-=======
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   },
   extraReducers: (builder) => {
     builder
@@ -99,10 +89,6 @@ export const authSlice = createSlice({
       .addCase(postRegister.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
-<<<<<<< HEAD
-=======
-        state.loading = false;
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
       })
       .addCase(postRegister.rejected, (state, action) => {
         state.loading = false;
@@ -124,9 +110,5 @@ export const authSlice = createSlice({
   },
 });
 
-<<<<<<< HEAD
 export const { resetStateChangePassword, resetStateError } = authSlice.actions;
-=======
-export const { resetStateChangePassword } = authSlice.actions;
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 export default authSlice.reducer;

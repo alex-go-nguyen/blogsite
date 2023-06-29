@@ -7,4 +7,3 @@ export const Layouts = {
   Empty: Empty,
   UserManagement: UserManagementLayout,
 };
-export type LayoutKeys = keyof typeof Layouts;

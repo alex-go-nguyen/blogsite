@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Image from 'next/image';
 
 export default function Custom404() {
@@ -14,10 +13,6 @@ export default function Custom404() {
       </div>
     </div>
   );
-=======
-export default function Custom404() {
-  return <h1>404 - Page Not Found</h1>;
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 }
 
 Custom404.Layout = 'Empty';

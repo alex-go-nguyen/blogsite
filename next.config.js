@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 const { withSentryConfig } = require('@sentry/nextjs');
-=======
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 const { i18n } = require('./next-i18next.config.js');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   i18n,
-<<<<<<< HEAD
   reactStrictMode: false,
   images: {
     loader: 'default',
@@ -15,17 +11,10 @@ const nextConfig = {
   },
   experimental: {
     forceSwcTransforms: true,
-=======
-  reactStrictMode: true,
-  images: {
-    loader: 'default',
-    domains: ['127.0.0.1', 'localhost'],
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   },
 };
 
 module.exports = nextConfig;
-<<<<<<< HEAD
 
 // Injected content via Sentry wizard below
 
@@ -61,5 +50,3 @@ module.exports = withSentryConfig(
     disableLogger: true,
   },
 );
-=======
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176

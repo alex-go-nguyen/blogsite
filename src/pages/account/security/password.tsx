@@ -91,10 +91,7 @@ export default function UserPassword() {
           loading={loading}
           disabled={loading}
           className="float-right ml-4 w-full lg:w-fit"
-<<<<<<< HEAD
           aria-label="Confirm - Click to modified your password"
-=======
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
         >
           Confirm
         </Button>
@@ -103,10 +100,7 @@ export default function UserPassword() {
           variant="outlined"
           className="float-right w-full lg:w-fit my-2 lg:my-0"
           onClick={() => reset()}
-<<<<<<< HEAD
           aria-label="Cancel"
-=======
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
         >
           Cancel
         </Button>

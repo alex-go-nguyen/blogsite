@@ -2,7 +2,6 @@ import { getMe, postChangePassword, postLogin, postLogout, postRegister } from '
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { ChangePasswordPayload, LoginPayload, RegisterPayload } from '@/services/auth/auth.dto';
 import { UserResponseData } from '@/services/user/users.dto';
-import { useRouter } from 'next/router';
 import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 type AuthContextProps = {
@@ -10,7 +9,7 @@ type AuthContextProps = {
   loading: boolean;
   error: boolean;
   isAuthenticated?: boolean;
-  isPasswordChanged: boolean;
+  isPasswordChanged?: boolean;
   login: (payload: LoginPayload) => void;
   logout: () => void;
   register: (payload: RegisterPayload) => void;
@@ -20,8 +19,6 @@ type AuthContextProps = {
 const defaultValue: AuthContextProps = {
   loading: false,
   error: false,
-  isAuthenticated: false,
-  isPasswordChanged: false,
   user: null,
   login: () => {},
   logout: () => {},

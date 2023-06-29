@@ -1,17 +1,13 @@
 import { FiMail } from 'react-icons/fi';
-import { useEffect } from 'react';
+import { useContext } from 'react';
 import Link from 'next/link';
-import LogoFooter from '@/assets/logoFooter';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { getCategories } from '@/redux/features/categories/categoriesSlice';
 import { useTranslation } from 'next-i18next';
 import { Button, Input } from '@/components';
 import Logo from '@/assets/logo';
+import { useAppSelector } from '@/redux/store';
 
 export function Footer() {
   const { t } = useTranslation('footer');
-
-  const dispatch = useAppDispatch();
 
   const { data } = useAppSelector((state) => state.categories);
 
@@ -26,15 +22,9 @@ export function Footer() {
     cookie: t('cookie'),
   };
 
-  useEffect(() => {
-    if (data.length === 0) {
-      dispatch(getCategories());
-    }
-  }, [dispatch, data.length]);
-
   return (
     <div className="bg-footer-color dark:bg-footer-color-dark">
-      <div className="container mx-auto">
+      <div className="lg:container mx-auto">
         <div className="grid lg:grid-cols-6 grid-cols-1 text-center lg:text-left place-items-stretch gap-x-20 border-b-2 dark:border-dark-mode py-6">
           <div className="text-color-medium dark:text-color-medium-dark text-sm lg:col-span-2 py-4">
             <h1 className="text-color-bold dark:text-color-bold-dark text-base font-bold mb-3">{translate.about}</h1>
@@ -58,27 +48,28 @@ export function Footer() {
             <Link href="/" className="mb-2 hover:text-red-500 block">
               {translate.home}
             </Link>
-            <Link href="/blog" className="mb-2 hover:text-red-500 block">
+            <Link href={`/category/${data?.[0]?.attributes.slug}`} className="mb-2 hover:text-red-500 block">
               {translate.blog}
             </Link>
           </div>
           <div className="lg:col-span-1 text-color-medium dark:text-color-medium-dark text-sm py-4">
             <h1 className="text-color-bold dark:text-color-bold-dark text-base font-bold mb-3">{translate.category}</h1>
-            {data.map((item) => (
-              <Link
-                href={`/category/${item.attributes.slug}`}
-                className="mb-2 hover:text-red-500 block w-full"
-                key={item.id}
-              >
-                {item.attributes.name}
-              </Link>
-            ))}
+            {data.length > 0 &&
+              data.map((item) => (
+                <Link
+                  href={`/category/${item.attributes.slug}`}
+                  className="mb-2 hover:text-red-500 block w-full"
+                  key={item.id}
+                >
+                  {item.attributes.name}
+                </Link>
+              ))}
           </div>
           <div className="lg:col-span-2 bg-white text-center px-6 rounded-lg dark:bg-input-dark py-4">
             <h1 className="font-bold mb-1 dark:text-color-bold-dark">Weekly Newsletter</h1>
             <p className="mb-8 dark:text-color-blur">Get blog articles and offers via email</p>
             <Input placeholder="Your Email" endDecorator={<FiMail />} />
-            <Button variant="solid" type="submit" className="mt-3 w-full">
+            <Button variant="solid" type="submit" className="mt-3 w-full" aria-label="Subcribe Email">
               Subcribe
             </Button>
           </div>

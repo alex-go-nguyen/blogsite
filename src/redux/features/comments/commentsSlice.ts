@@ -1,18 +1,10 @@
 import { BaseResponseData } from '@/dtos/base';
-<<<<<<< HEAD
 import { CommentAttribute } from '@/services/comment/comment.dto';
-=======
-import { Comment } from '@/services/comment/comment.dto';
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 import { getCommentsArticleAPI } from '@/services/comment/comment.service';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 interface CommentsState {
-<<<<<<< HEAD
   data: BaseResponseData<CommentAttribute>[];
-=======
-  data: BaseResponseData<Comment>[];
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   loading: boolean;
   error: boolean;
 }
@@ -28,11 +20,7 @@ export const getCommentsArticle = createAsyncThunk('Categoriess/getCategory', (a
 );
 
 export const commentsSlice = createSlice({
-<<<<<<< HEAD
   name: 'Comments',
-=======
-  name: 'Comment',
->>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   initialState,
   reducers: {},
   extraReducers: (builder) => {

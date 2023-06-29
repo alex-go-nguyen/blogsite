@@ -1,10 +1,11 @@
 import { Avatar } from '@/services/user/users.dto';
-import { axiosClient } from '@/utils/axiosClient';
+import { axiosClient, axiosServer } from '@/utils/axiosClient';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { FileLoader, UploadAdapter } from '@ckeditor/ckeditor5-upload';
 import type { Editor as IEditor } from '@ckeditor/ckeditor5-core';
-import { ChangeEvent, ChangeEventHandler } from 'react';
+import { ChangeEvent, ChangeEventHandler, forwardRef } from 'react';
+import Cookies from 'js-cookie';
 
 export type EditorProps = {
   value?: string;
@@ -34,13 +35,16 @@ function uploadPlugin(editor: IEditor) {
               body.append('files', file);
 
               try {
-                const { data } = await axiosClient.post<Avatar[]>('/upload', body, {
+                const accessToken = Cookies.get('access_token');
+
+                const { data } = await axiosServer.post<Avatar[]>('/upload', body, {
                   headers: {
                     'Content-Type': 'multipart/form-data',
+                    Authorization: 'Bearer ' + accessToken,
                   },
                 });
 
-                resolve({ default: 'http://127.0.0.1:1337' + data[0].url });
+                resolve({ default: data?.[0].url });
               } catch (error) {
                 reject(error);
               }
@@ -52,9 +56,10 @@ function uploadPlugin(editor: IEditor) {
   };
 }
 
-function Editor({ value, onChange, onBlur, ...props }: EditorProps) {
+const Editor = forwardRef<CKEditor<ClassicEditor>, EditorProps>(({ value, onChange, onBlur, ...props }, ref) => {
   return (
     <CKEditor
+      ref={ref}
       {...props}
       config={{
         extraPlugins: [initPlugin, uploadPlugin],
@@ -83,6 +88,6 @@ function Editor({ value, onChange, onBlur, ...props }: EditorProps) {
       }}
     />
   );
-}
+});
 
 export default Editor;
