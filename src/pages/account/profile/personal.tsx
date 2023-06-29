@@ -23,7 +23,11 @@ export default function Personal() {
 
   const dispatch = useAppDispatch();
 
+<<<<<<< HEAD
   const { data, isUpdated, loading } = useAppSelector((state) => state.userDetail);
+=======
+  const { data, isUpdated } = useAppSelector((state) => state.userDetail);
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 
   const {
     register,
@@ -88,6 +92,7 @@ export default function Personal() {
               <Input {...register('about')} defaultValue={user.about} />
             </div>
           </div>
+<<<<<<< HEAD
           <Button
             type="submit"
             variant="solid"
@@ -97,13 +102,20 @@ export default function Personal() {
             disabled={loading}
           >
             Submit
+=======
+          <Button type="submit" variant="solid" className="float-right ml-4 w-full lg:w-fit">
+            Confirm
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
           </Button>
           <Button
             type="button"
             variant="outlined"
             className="float-right w-full my-2 lg:my-0 lg:w-fit"
             onClick={() => reset()}
+<<<<<<< HEAD
             aria-label="Cancel"
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
           >
             Cancel
           </Button>

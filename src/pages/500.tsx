@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Image from 'next/image';
 
 export default function Custom500() {
@@ -9,6 +10,10 @@ export default function Custom500() {
       </div>
     </div>
   );
+=======
+export default function Custom500() {
+  return <h1>500 - Server-side error occurred</h1>;
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 }
 
 Custom500.Layout = 'Empty';

@@ -7,9 +7,13 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
+    typography: (theme) => ({}),
     extend: {
       backgroundColor: {
+<<<<<<< HEAD
         'light-mode': '#ffffff',
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
         'dark-mode': '#181a2a',
         'toggle-light': '#e8e8ea',
         'toggle-dark': '#F9BE39',
@@ -38,7 +42,10 @@ module.exports = {
       borderColor: {
         'light-mode': '#E8E8EA',
         'dark-mode': '#242535',
+<<<<<<< HEAD
         primary: '#F9BE39',
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
       },
       keyframes: {},
       animation: {

@@ -19,6 +19,11 @@
       "react": ["./node_modules/@types/react"]
     }
   },
+<<<<<<< HEAD
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/redux/store.ts", "jest.config.js", "babel.config.js"],
   "exclude": ["node_modules", "./cypress.config.ts", "cypress", "**/*.cy.tsx"]
+=======
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/redux/store.ts"],
+  "exclude": ["node_modules"]
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 }

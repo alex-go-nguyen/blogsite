@@ -4,6 +4,10 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import cx from 'classnames';
 import Link from 'next/link';
+<<<<<<< HEAD
+=======
+import { motion } from 'framer-motion';
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 import { BiSearch } from 'react-icons/bi';
 import { ImSad } from 'react-icons/im';
 import { useForm } from 'react-hook-form';
@@ -12,13 +16,23 @@ import { object, string } from 'yup';
 import { searchUsers } from '@/redux/features/users/usersSlice';
 import { getStrapiMedia } from '@/utils/media';
 import { FaPencilAlt } from 'react-icons/fa';
+<<<<<<< HEAD
+=======
+import scrollToTop from '@/utils/scrollToTop';
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { Avatar, Button, Card, Input, Pagination, Select, SearchPayload } from '@/components';
+<<<<<<< HEAD
 import { ORDER_OPTIONS, OrderEnum, PAGE_SIZE } from '@/constants';
 import scrollToTop from '@/utils/scrollToTop';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+=======
+import { ORDER_OPTIONS, OrderEnum } from '@/constants';
+
+const PAGE_SIZE = 3;
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 
 const schema = object({
   searchQuery: string().required('is Required'),
@@ -84,7 +98,11 @@ export default function Search() {
         <div className="col-span-9 lg:col-span-10">
           <Input {...register('searchQuery')} placeholder="Search" defaultValue={q} className="text-sm" />
         </div>
+<<<<<<< HEAD
         <Button variant="solid" className="col-span-3 lg:col-span-2" aria-label={translate.search}>
+=======
+        <Button variant="solid" className="col-span-3 lg:col-span-2">
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
           <BiSearch />
           <span className="pl-2 text-sm">{translate.search}</span>
         </Button>
@@ -95,17 +113,25 @@ export default function Search() {
             href={{ pathname: '/search', query: { q, type: 'posts' } }}
             className={cx(
               'px-4 py-2 cursor-pointer',
+<<<<<<< HEAD
               (type === 'posts' || !type) && ' text-color-primary border-b-2  border-primary',
+=======
+              (type === 'posts' || !type) && 'text-blue-500 border-b-2 border-blue-500',
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
             )}
           >
             {translate.posts}
           </Link>
           <Link
             href={{ pathname: '/search', query: { q, type: 'authors' } }}
+<<<<<<< HEAD
             className={cx(
               'px-4 py-2 cursor-pointer',
               type === 'authors' && 'text-color-primary border-b-2  border-primary',
             )}
+=======
+            className={cx('px-4 py-2 cursor-pointer', type === 'authors' && 'text-blue-500 border-b-2 border-blue-500')}
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
           >
             {translate.authors}
           </Link>
@@ -126,6 +152,7 @@ export default function Search() {
           </div>
         )}
       </div>
+<<<<<<< HEAD
       {loading ? (
         <span className="flex w-full justify-center my-32 animate-spin duration-200">
           <AiOutlineLoading3Quarters />
@@ -137,6 +164,22 @@ export default function Search() {
               <Link
                 href={`/writer/${item.id}`}
                 className="flex hover: dark:hover:bg-blue-300 p-4 rounded-md"
+=======
+
+      {!loading && type === 'authors' ? (
+        users.length > 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 "
+          >
+            {users.map((item) => (
+              <Link
+                href={`/writer/${item.id}`}
+                className="flex hover:bg- dark:hover:bg-blue-300 p-4 rounded-md"
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
                 key={item.id}
               >
                 <Avatar
@@ -157,14 +200,28 @@ export default function Search() {
                 </div>
               </Link>
             ))}
+<<<<<<< HEAD
           </div>
+=======
+          </motion.div>
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
         ) : (
           <div className="flex items-center justify-center">
             <span className="px-2">{translate.noResult}</span> <ImSad />
           </div>
         )
       ) : articles.length > 0 ? (
+<<<<<<< HEAD
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+=======
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        >
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
           {articles.map((item) => (
             <Card
               isLoading={searchArticlesLoading}
@@ -177,12 +234,20 @@ export default function Search() {
               key={item.id}
             />
           ))}
+<<<<<<< HEAD
         </div>
+=======
+        </motion.div>
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
       ) : (
         <div className="flex items-center justify-center">
           <span className="px-2">{translate.noResult}</span> <ImSad />
         </div>
       )}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
       <Pagination
         pageCount={pageCount}
         pageRangeDisplayed={2}

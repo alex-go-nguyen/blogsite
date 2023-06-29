@@ -1,5 +1,9 @@
 import Logo from '@/assets/logo';
+<<<<<<< HEAD
 import { postRegister, resetStateError } from '@/redux/features/auth/authSlice';
+=======
+import { postRegister } from '@/redux/features/auth/authSlice';
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 import { useAppDispatch } from '@/redux/store';
 import { RegisterPayload } from '@/services/auth/auth.dto';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -65,6 +69,7 @@ export default function SignUp() {
     }
   }, [user, router, loading]);
 
+<<<<<<< HEAD
   useEffect(() => {
     if (error) {
       dispatch(resetStateError());
@@ -72,6 +77,8 @@ export default function SignUp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   return (
     <div className="h-screen flex items-center justify-center text-center">
       <div className="w-3/4 lg:w-1/2 shadow-2xl dark:shadow-blue-500/50 p-12 bg-white dark:bg-dark-mode rounded-lg overflow-hidden ">
@@ -114,6 +121,7 @@ export default function SignUp() {
             className={cx('my-2', errors.confirmPassword && '!border-red-500 my-0')}
           />
           <p className="text-red-500 text-left text-sm mb-2">{errors.confirmPassword?.message}</p>
+<<<<<<< HEAD
           <Button
             variant="solid"
             loading={loading}
@@ -125,6 +133,13 @@ export default function SignUp() {
           </Button>
         </form>
         {/* <div>
+=======
+          <Button variant="solid" loading={loading} loadingPosition="start" className="w-full my-4">
+            {translate.register}
+          </Button>
+        </form>
+        <div>
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
           <div className="font-semibold text-xl text-blue-500 py-4 ">Login with others ways</div>
           <div className="grid grid-cols-3 gap-4 text-xs lg:text-lg">
             <Button variant="outlined" className="col-span-1 flex items-center justify-center">
@@ -146,7 +161,11 @@ export default function SignUp() {
               Github
             </Button>
           </div>
+<<<<<<< HEAD
         </div> */}
+=======
+        </div>
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
       </div>
     </div>
   );

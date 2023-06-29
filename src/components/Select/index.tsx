@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { DetailedHTMLProps, SelectHTMLAttributes, forwardRef } from 'react';
+=======
+import { DetailedHTMLProps, HTMLAttributes, SelectHTMLAttributes, forwardRef } from 'react';
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 import cx from 'classnames';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -15,7 +19,11 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(({ className, ...props
         )}
         {...props}
       />
+<<<<<<< HEAD
       <span className="absolute right-2 dark:text-white z-10">
+=======
+      <span className="absolute right-2 -z-10 dark:text-white">
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
         <FiChevronDown />
       </span>
     </div>

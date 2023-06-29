@@ -1,7 +1,11 @@
 import Logo from '@/assets/logo';
 import Link from 'next/link';
 import { FaLock } from 'react-icons/fa';
+<<<<<<< HEAD
 import { FaUser } from 'react-icons/fa';
+=======
+import { FaFacebook, FaGithub, FaGoogle, FaUser } from 'react-icons/fa';
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 import { useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,8 +18,11 @@ import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { Button, Input, Seo } from '@/components';
+<<<<<<< HEAD
 import { useAppDispatch } from '@/redux/store';
 import { resetStateError } from '@/redux/features/auth/authSlice';
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 
 const schema = object({
   identifier: string().required('Required'),
@@ -27,8 +34,11 @@ export default function Login() {
 
   const router = useRouter();
 
+<<<<<<< HEAD
   const dispatch = useAppDispatch();
 
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   const { user, loading, error, login } = useAuth();
 
   const { register, handleSubmit } = useForm<LoginPayload>({ resolver: yupResolver(schema) });
@@ -54,6 +64,7 @@ export default function Login() {
     }
   }, [user, router, loading]);
 
+<<<<<<< HEAD
   useEffect(() => {
     if (error) {
       dispatch(resetStateError());
@@ -61,6 +72,8 @@ export default function Login() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
   return (
     <>
       <Seo seo={seo} />
@@ -86,7 +99,10 @@ export default function Login() {
               loading={loading}
               loadingPosition="start"
               className="w-full my-4"
+<<<<<<< HEAD
               aria-label="Login - CLick to login to Go Blog"
+=======
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
             >
               {translate.login}
             </Button>
@@ -99,7 +115,11 @@ export default function Login() {
               </Link>
             </div>
           </form>
+<<<<<<< HEAD
           {/* <div>
+=======
+          <div>
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
             <h1 className="font-semibold text-xl relative text-blue-500 py-4">Login with others ways</h1>
             <div className="grid grid-cols-3 gap-4 text-xs lg:text-lg">
               <Button variant="outlined" className="col-span-1 flex items-center justify-center">
@@ -121,7 +141,11 @@ export default function Login() {
                 <span className="mr-2"> Github</span>
               </Button>
             </div>
+<<<<<<< HEAD
           </div> */}
+=======
+          </div>
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
         </div>
       </div>
     </>

@@ -1,5 +1,9 @@
 {
   "oldest": "Cũ nhất",
+<<<<<<< HEAD
   "latest": "Mới nhất",
   "noResult": "Chưa có bài viết nào về thể loại này"
+=======
+  "latest": "Mới nhất"
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 }

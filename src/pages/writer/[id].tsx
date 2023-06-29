@@ -17,7 +17,11 @@ export default function Writer() {
   const dispatch = useDispatch();
 
   const { data: user, loading: userLoading } = useAppSelector((state) => state.userDetail);
+<<<<<<< HEAD
   const { data: articles, loading: articlesLoading } = useAppSelector((state) => state.articlesFilter);
+=======
+  const { data: articles, loading: articlesLoading } = useAppSelector((state) => state.articlesWriter);
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 
   const loading = userLoading || articlesLoading;
 
@@ -108,7 +112,11 @@ export const getStaticProps: GetStaticProps = storeWrapper.getStaticProps(
         props: {
           ...(await serverSideTranslations(locale || 'en', ['common', 'header', 'footer'])),
         },
+<<<<<<< HEAD
         revalidate: 5,
+=======
+        revalidate: 10,
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
       };
     },
 );

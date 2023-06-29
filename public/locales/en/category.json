@@ -1,5 +1,9 @@
 {
   "oldest": "Oldest",
+<<<<<<< HEAD
   "latest": "Newest",
   "noResult": "Category doesn't have any article yet"
+=======
+  "latest": "Newest"
+>>>>>>> 6f491b1d773fb3c13539b47e83bc11a8847d9176
 }
