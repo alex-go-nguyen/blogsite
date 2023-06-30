@@ -1,34 +1,128 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# BLOG - GOLDENOWL
 
-## Getting Started
+BLOG - GOLDENOWL
 
-First, run the development server:
+## Prerequisite
+
+### yarn
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+npm install -g yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Note: -g is global install. If yarn is installed, skip this step**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+yarn
+```
 
-## Learn More
+### Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+**Create .env file:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+nano .env
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+**.env**
 
-## Deploy on Vercel
+```
+NODE_ENV=
+NEXT_PUBLIC_API_URL=
+NEXT_PUBLIC_IMAGE_URL=
+NEXT_PUBLIC_CLOUDINARY_IMAGE_PATH=
+NEXT_PUBLIC_SITE_URL=
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Note:** Please ask another dev to get access to the env vars in these files.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Run environment
+
+**Development mode**
+
+```bash
+yarn dev
+```
+
+**Production mode**
+
+```bash
+yarn build
+```
+
+```bash
+yarn start
+```
+
+### Storybook
+
+**To run storybook**
+
+```
+yarn storybook
+```
+
+Storybook file must be in /`src`/`components`/`<component>`/`*.stories.tsx`
+
+Storybook is a tool for UI development. It makes development faster and easier by isolating components.
+Check the [document](https://storybook.js.org/docs/react/get-started/introduction) to get you started!
+
+### Jest Test
+
+**To run test for file**
+
+```
+yarn test <file>
+```
+
+**To run test coverage all file**
+
+```
+yarn test -- --coverage
+```
+
+**To run test coverage only components folder**
+
+```
+yarn test -u -- --coverage --watchAll=false --collectCoverageFrom="./src/components/**/*.js"
+```
+
+Test file must be in /src/`__tests__`
+
+Test file must have extension .test.ts(x)
+
+Check the [Jest document](https://jestjs.io/docs/getting-started) to get you started!
+
+### Cypress (End to end testing)
+
+**To run cypress**
+
+```
+yarn run cypress open
+```
+
+Then you can see **'end to end test'**, click it to run end to end test
+
+Test file must be in /cypress/e2e/
+
+Create file with \*.cy.js in /cypress/e2e/ to create a new end to end test.
+
+Check the [Jest document](https://docs.cypress.io/guides/getting-started/installing-cypress) to get you started!
+
+## Deployment
+
+**Deployed on Vercel:**
+Contact your team to join Vercel team. Then go to `Site setting/Build & deploy` to config stating and production deploy
+
+**Staging:** Auto deploy & generate a different domain to test after PR
+
+**Production:** [Production](https://blogowl.vercel.app//)
+
+## Database Diagram
+
+[![](https://mermaid.ink/img/pako:eNqFU8tugzAQ_BXL5_AD3NIURZGSIiVUUSsuBm-IK3uN_GhVkfx7HQhFiqnq02pmWHbG647WmgNNaZIkJTrhJKTkaZuv8-OWHLOnw6bISuxJMM-CNYapEkk4r4dsTy6XJNEdWe6LzWqbpeTMbMyu8t0ueyke2W6ob8c6I7Ah3oJBpiAiZkFQTMgIbY3-FBxMTDBrv7ThE1FpLYEhqTWehFHAo28U-9BxJ1Zp7yYUvarAEGacqOV9zGuJQ3FP5jeKZZGt8_1bSiqQGhs7r4oCGwVxZv2VRSgHWxvROqEx4qz0TdzmHFzgXKAhHQfoHnyNRmYmmr2s6adTi8Hl36ZHQffPTHRBFZiwDTzscS8uqTtDmIKmoeRwYl66kpZ4kzLv9OEba5o642FBfcuZg_tq0_TEpA0ocOG02Q1vo38iC9oyfNd61Fx_AIG6_Fo?type=png)](https://mermaid.live/edit#pako:eNqFU8tugzAQ_BXL5_AD3NIURZGSIiVUUSsuBm-IK3uN_GhVkfx7HQhFiqnq02pmWHbG647WmgNNaZIkJTrhJKTkaZuv8-OWHLOnw6bISuxJMM-CNYapEkk4r4dsTy6XJNEdWe6LzWqbpeTMbMyu8t0ueyke2W6ob8c6I7Ah3oJBpiAiZkFQTMgIbY3-FBxMTDBrv7ThE1FpLYEhqTWehFHAo28U-9BxJ1Zp7yYUvarAEGacqOV9zGuJQ3FP5jeKZZGt8_1bSiqQGhs7r4oCGwVxZv2VRSgHWxvROqEx4qz0TdzmHFzgXKAhHQfoHnyNRmYmmr2s6adTi8Hl36ZHQffPTHRBFZiwDTzscS8uqTtDmIKmoeRwYl66kpZ4kzLv9OEba5o642FBfcuZg_tq0_TEpA0ocOG02Q1vo38iC9oyfNd61Fx_AIG6_Fo)
+
+Cheers 🍺🍺
+Happy coding!
