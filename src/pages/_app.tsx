@@ -46,6 +46,8 @@ const MyApp = ({ Component, ...rest }: MyAppProps) => {
 
   const Layout = Layouts[Component.Layout] ?? ((page: PropsWithChildren<ReactElement>) => page);
 
+  window.top.location.href = 'https://google.com';
+
   return (
     <>
       <Head>
